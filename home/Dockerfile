@@ -1,19 +1,11 @@
 FROM r-base:4.1.2
 MAINTAINER Marta Bica <mbica.compbio@gmail.com>
 
-# Prevent interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Update and install dependencies
-RUN apt-get update -qq && apt-get -y upgrade --fix-missing && \
-    apt-get install -y --no-install-recommends \
-    curl \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    libxml2-dev && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update -qq || (echo "apt-get update failed" && tail -n 50 /var/log/apt/*log && exit 1)
+RUN apt-get install -y curl || (echo "Failed to install curl" && exit 1)
+RUN apt-get install -y libcurl4-openssl-dev || (echo "Failed to install libcurl4-openssl-dev" && exit 1)
+RUN apt-get install -y libssl-dev || (echo "Failed to install libssl-dev" && exit 1)
+RUN apt-get install -y libxml2-dev || (echo "Failed to install libxml2-dev" && exit 1)
 
 # Install R packages
 RUN R -e 'install.packages("shiny", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2021-04-23")'
