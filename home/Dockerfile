@@ -1,7 +1,7 @@
 FROM r-base:4.1.2
 MAINTAINER Marta Bica <mbica.compbio@gmail.com>
 
-RUN apt-get update && apt-get -y upgrade && apt-get -y autoremove
+RUN apt-get update && apt-get -y upgrade --fix-missing && apt-get -y autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get install -y curl
 
