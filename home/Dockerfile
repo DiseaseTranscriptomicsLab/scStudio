@@ -1,15 +1,19 @@
 FROM r-base:4.1.2
 MAINTAINER Marta Bica <mbica.compbio@gmail.com>
 
-RUN apt-get update && apt-get -y upgrade --fix-missing && apt-get -y autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get install -y curl
-
-RUN apt-get install -y libcurl4-openssl-dev
-
-RUN apt-get install -y libssl-dev
-
-RUN apt-get install -y libxml2-dev 
+# Update and install dependencies
+RUN apt-get update -qq && apt-get -y upgrade --fix-missing && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install R packages
 RUN R -e 'install.packages("shiny", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2021-04-23")'
