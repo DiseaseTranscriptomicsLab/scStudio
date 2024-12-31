@@ -22,6 +22,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
-        context: .
+        context: ./home       
+        file: ./home/Dockerfile  
         push: true
-        tags: martabica/scstudio-home:1.0
+        tags: martabica/scstudio-home:1.1
