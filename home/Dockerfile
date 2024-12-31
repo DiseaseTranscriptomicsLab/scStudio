@@ -1,4 +1,4 @@
-FROM r-base:4.1.2
+FROM rocker/r-ver:4.1.2
 MAINTAINER Marta Bica <mbica.compbio@gmail.com>
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y autoremove
