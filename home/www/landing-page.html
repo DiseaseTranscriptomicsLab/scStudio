@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v6.0.0/css/all.css">
+
+
+
+<div class = "hero">
+   <div class = "hero-inner">
+      <h1>Welcome to scStudio</h1>
+      <h2>by the Disease Transcriptomics lab</h2>
+      <button class = "hero-button" onclick="window.open('https://imm.medicina.ulisboa.pt/group/distrans/', '_blank')" role="button">About us <i class="fa-solid fa-circle-info"></i></button>
+      <button class = "hero-button" onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/', '_blank')" role="button" id = "explore">Explore other tools <i class="fa-solid fa-magnifying-glass"></i></button>
+      
+     <!--  {guide_button} Note: This is an R object - see UI/server scripts -->
+      
+   </div>
+</div>
+
+
+
+<!-- MAIN FEATURES -->
+<div class = "grey-container">
+
+   <div class = "container-inner-contents" id = "tab-buttons">
+      
+      <!-- Link to data table tab-->
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_DATA', '_blank')"
+            role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa-solid fa-database fa-3x"></i>
+                  </div>
+                  <h3>Data</h3>
+                  <p>Access single-cell data and create a working session.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+            
+     <!-- Link to QC tab-->
+
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_QC', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa fa-tasks fa-3x"></i>
+                  </div>
+                  <h3>Quality Control</h3>
+                  <p>Discard poor quality cells using a set of indicators.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+
+      <!-- Link to NORM tab-->
+
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_NORM', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa fa-balance-scale fa-3x"></i>
+                  </div>
+                  <h3>Normalization</h3>
+                  <p>Correct sequencing depth and batch effect.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+
+      <!-- Link to DIMRED tab-->
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_DIMRED', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa fa-cube fa-3x"></i>
+                  </div>
+                  <h3>Dimensionality Reduction</h3>
+                  <p>Choose highly variable genes and create low-dimensional visual representations.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+
+      <!-- Link to CLUSTER tab-->
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_CLUSTER', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa-solid fa-sitemap fa-3x"></i>
+                  </div>
+                  <h3>Clustering</h3>
+                  <p>Perform clustering analysis to group similar cells.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+      </div>
+   </div>
+   
+   
+   <div class = "grey-container">
+
+   <div class = "container-inner-contents" id = "tab-buttons">
+      
+      <!-- Link to DEA tab-->
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_DEA', '_blank')"
+            role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa-solid fa-sort-amount-asc fa-3x"></i>
+                  </div>
+                  <h3>Differential Expression Analysis</h3>
+                  <p>Compare and rank genes based on the expression levels between different conditions.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+            
+     <!-- Link to FEA tab-->
+
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_GSEA', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa fa-barcode fa-3x"></i>
+                  </div>
+                  <h3>Functional Enrichment Analysis</h3>
+                  <p>Calculate gene set scores and identify up- or -down regulated pathways.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+
+      <!-- Link to FEATPLOT tab-->
+
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_FEATPLOT', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa fa-braille fa-3x"></i>
+                  </div>
+                  <h3>Feature Plots</h3>
+                  <p>Obtain visual representations of gene expression levels.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+
+      <!-- Link to Settings tab-->
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_SETTINGS', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa fa-cog fa-3x"></i>
+                  </div>
+                  <h3>Settings</h3>
+                  <p>Optimize selection of colors and data annotation.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+
+      <!-- Link to Report tab-->
+            <a onclick="window.open('https://compbio.imm.medicina.ulisboa.pt/app/scStudio_REPORT', '_blank')" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa-solid fa-book fa-3x"></i>
+                  </div>
+                  <h3>Report</h3>
+                  <p>Access methods and parameter annotation from every analysis performed in your session.</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+      </div>
+   </div>
+   
+   
+   
+   
+   <div class = "grey-container">
+
+   <div class = "container-inner-contents" id = "tab-buttons">
+      
+      <!-- Link to Pseudotime tab-->
+            <a onclick="', '_blank')"
+            role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa-solid fa-rocket fa-3x"></i>
+                  </div>
+                  <h3>Trajectory Inference</h3>
+                  <p>Coming soon...</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+            
+     <!-- Link to Cell-Cell Interaction tab-->
+
+            <a onclick="" role="button" class = "featured-item">
+               <div class="features-text-section">
+                  <div class="icon-box">
+                     <i class="fa fa-arrows-h fa-3x"></i>
+                  </div>
+                  <h3>Cell-Cell Interaction</h3>
+                  <p>Coming soon...</p>
+                  <div class="fa fa-chevron-right" aria-hidden="true"></div>
+               </div>
+            </a>
+
+      </div>
+   </div>   
+
+
+<!-- WHATS NEW/INDICATOR UPDATES -->
+<div class = "grey-container">
+   <div class = "container-inner-contents">
+     <!-- Links to schedule/latest updates -->
+      <div class = "white-box" id = "ind-updates-section">
+         <h3>Updates</h3>
+         <hr>
+         <div class = white-box-inner>
+           <div>
+            <h4>Schedule</h4>
+            <p>Multiple updates will be performed during January 2025.</p>
+            <hr>
+            </div>
+            <div>
+         </div>
+         <hr>
+         <div>
+            <h4>Feedback</h4>
+            <p>If you have any feedback about scStudio, please don’t hesitate to <a href="mailto:ana.bica@medicina.ulisboa.pt" target="_blank">contact us</a>.
+            </p>
+         </div>
+         </div>
+      </div>
+      <!-- Links to new indicators/features in the dashboard -->
+      <div class = "white-box" id = "whats-new-section">
+         <h3>What's new</h3>
+         <hr>
+         <div class = "white-box-inner">
+            <h4></h4>
+            <p>The latest update introduces a feature for uploading Seurat and SingleCellExperiment objects in .rds format.</p>
+            <hr>
+            <h4></h4>
+            <p></p>
+            <hr>
+            <h4</h4>
+            <p></p>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+
+<!-- BOTTOM SECTION: ADDITIONAL LINKS -->
+<div class = "phs-purple-container">
+   <div class = "container-inner-contents" id = "further-links-section">
+      <!-- links to scStudio github repositorie -->
+      <div class = "links-item">
+         <h3>Source Code</h3>
+         <a href="https://github.com/DiseaseTranscriptomicsLab/scStudio" target="_blank">Github Repository</a>
+      </div>
+      <div class = "links-item">
+         
+<!-- links to user guides/supplemetary resouces -->
+         <h3>Learning Resources</h3>
+         <a href="https://github.com/DiseaseTranscriptomicsLab/scStudio" target="_blank">Tutorials</a>
+      </div>
+      <div class = "links-item">
+         
+ <!-- links to ways of staying in touch - newsletter/social media -->
+         <h3>Stay in touch</h3>
+         <a href="https://twitter.com/NMoraisLab" target="_blank">Follow us <i class = "fab fa-twitter fa-2x"></i></a>
+      </div>
+   </div>
+   
+   <hr>
+   <div class = "bottom-links" >
+    <p></p>
+         </div>
+      </div>
+   </div>
+</div>
