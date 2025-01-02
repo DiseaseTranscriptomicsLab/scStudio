@@ -1,4 +1,4 @@
-FROM r-base:4.1.2
+FROM rocker/r-ver:4.1.2
 MAINTAINER Marta Bica <mbica.compbio@gmail.com>
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y autoremove
@@ -9,7 +9,11 @@ RUN apt-get install -y libcurl4-openssl-dev
 
 RUN apt-get install -y libssl-dev
 
-RUN apt-get install -y libxml2-dev 
+RUN apt-get install -y libxml2-dev
+
+RUN apt-get install -y libgeos-dev
+
+RUN apt-get install -y libglpk40 libglpk-dev
 
 # Install R packages
 
