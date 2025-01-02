@@ -1,0 +1,31 @@
+# Create docker image for scStudio - Select Data
+name: Build Docker Image (select-data)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'select-data/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_MB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_MB_PASS }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./select-data      
+        file: ./select-data/Dockerfile  
+        push: true
+        tags: martabica/scstudio-select-data:1.1
