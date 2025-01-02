@@ -28,4 +28,4 @@ jobs:
         context: ./select-data      
         file: ./select-data/Dockerfile  
         push: true
-        tags: martabica/scstudio-select-data:1.1
+        tags: martabica/scstudio-selectdata:1.1
