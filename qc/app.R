@@ -1,10 +1,5 @@
 #INFORMATION-----------------------------
 
-# add doublet methods
-# allow to store doublet analyses 
-# add doublet analysis to report 
-# add cut off line to violins. 
-
 #LOAD LIBRARIES ------------------------
 library(bslib)
 library(data.table)
@@ -34,12 +29,6 @@ library(shinythemes)
 library(stringi)
 library(stringr)
 library(tools)
-
-#library(markdown)
-#library(scico)
-#library(dqshiny)
-#library(reshape2)
-
 
 print("Sucessfully loaded libraries.")
 
