@@ -24,15 +24,6 @@ library(stringi)
 library(stringr)
 library(tools)
 
-
-#library(markdown)
-#library(scico)
-#library(dqshiny)
-#library(Seurat)
-#library(scater)
-#library(scDblFinder)
-#library(limma)
-
 print("Sucessfully loaded libraries.")
 
 #LOAD TABS-------------------------------
