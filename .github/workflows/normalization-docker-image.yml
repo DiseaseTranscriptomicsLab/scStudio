@@ -1,0 +1,31 @@
+# Create docker image for scStudio - Normalization
+name: Build Docker Image (normalization)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'normalization/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_MB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_MB_PASS }}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./normalization      
+        file: ./normalization/Dockerfile  
+        push: true
+        tags: ${{ secrets.DOCKERHUB_MB_USERNAME }}/scstudio-normalization:1.1
