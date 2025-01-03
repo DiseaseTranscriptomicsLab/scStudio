@@ -67,7 +67,7 @@ tags$head(
 ## navbarPage --------------------------------------- 
   navbarPage("scStudio: Clustering",
           tabPanel("Seurat",
-                     tab_SEURAT),
+                     tab_SEURAT)
       )#close navbarPage 
   
 ) #close UI 
