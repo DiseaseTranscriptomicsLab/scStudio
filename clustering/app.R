@@ -25,15 +25,6 @@ library(stringi)
 library(stringr)
 library(tools)
 
-#library(markdown)
-#library(scico)
-#library(dqshiny)
-#library(scater)
-#library(scDblFinder)
-#library(scran)
-#library(limma)
-#library(spatstat.core)
-
 print("Sucessfully loaded libraries.")
 
 #LOAD TABS-------------------------------
