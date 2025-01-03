@@ -70,7 +70,7 @@ tags$head(
 ## navbarPage --------------------------------------- 
   navbarPage("scStudio: DEA",
           tabPanel("Gene Ranking",
-                     tab_DEA),
+                     tab_DEA)
       )#close navbarPage 
   
 ) #close UI 
