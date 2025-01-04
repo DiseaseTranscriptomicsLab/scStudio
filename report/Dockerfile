@@ -22,6 +22,7 @@ RUN R -e 'install.packages("data.table", repos="https://packagemanager.rstudio.c
 RUN R -e 'install.packages("DT", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("dplyr", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("ff", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
+RUN R -e 'install.packages("ggheatmap")'
 RUN R -e 'install.packages("ggplot2", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("ggrepel", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("ggridges")'
