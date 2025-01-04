@@ -7,7 +7,7 @@ library(DT)
 library(ff)
 library(fgsea)
 library(GEOquery)
-library(ggheatmap) #install dev github version
+library(ggheatmap)
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
