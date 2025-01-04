@@ -16,6 +16,7 @@ RUN apt-get install -y libgeos-dev
 RUN apt-get install -y libglpk40 libglpk-dev
 
 # Install R packages
+RUN R -e 'install.packages("colourpicker", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2024-12-23")'
 RUN R -e 'install.packages("data.table", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("dplyr", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("DT", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
