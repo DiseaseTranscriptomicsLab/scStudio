@@ -7,12 +7,12 @@ get_gsea <- function(dea, ordering, organism, subcategories){
   dea <- dea[order(dea[[ordering]], decreasing = TRUE),]
   
   rank <- as.data.frame(cbind(dea$Gene, as.numeric(dea[[ordering]])))
-  colnames(rank) <- c("genes", "log2FC")
-  rank$log2FC <- as.numeric(rank$log2FC)
-  rank <- rank[!is.na(rank$log2FC),]
+  colnames(rank) <- c("genes", "metric")
+  rank$metric <- as.numeric(rank$metric)
+  rank <- rank[!is.na(rank$metric),]
   
   #nrank <- as.numeric(as.character(rank[,2]))
-  nrank <- as.numeric(rank$log2FC)
+  nrank <- as.numeric(rank$metric)
   names(nrank) <- rank$genes
   
   

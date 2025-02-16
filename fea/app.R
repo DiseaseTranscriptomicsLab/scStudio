@@ -190,6 +190,16 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
              else {overall_vars$dea <- list()
              save_session(overall_vars$session_token ,overall_vars, "dea")}
              
+             try({
+               if (length(grep("roc",input$select_dea_gsea)) == 1){
+                 
+                 opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)", "SNR")
+               }
+               else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value", "SNR")}
+               
+               updateSelectInput(session, "gsea_ordering",choices = opts)
+             })
+             
              overall_vars$md5$dea <- md5sum(
                paste0(getwd(),"/tokens/", overall_vars$session_token, "/dea.rds"))
              
@@ -272,6 +282,16 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
            
            overall_vars$md5$dea <- md5sum(
              paste0(getwd(),"/tokens/", overall_vars$session_token, "/dea.rds"))
+           
+           try({
+             if (length(grep("roc",input$select_dea_gsea)) == 1){
+               
+               opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)", "SNR")
+             }
+             else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value", "SNR")}
+             
+             updateSelectInput(session, "gsea_ordering",choices = opts)
+           })
            
            if ("scores.rds" %in% files){
              overall_vars$scores <- upload_session(overall_vars$session_token, "scores")
@@ -427,6 +447,16 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
       
       if (check_md5sum_dea != overall_vars$md5$dea){
         overall_vars$dea <- upload_session(overall_vars$session_token, "dea")
+        
+        try({
+          if (length(grep("roc",input$select_dea_gsea)) == 1){
+            
+            opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)", "SNR")
+          }
+          else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value", "SNR")}
+          
+          updateSelectInput(session, "gsea_ordering",choices = opts)
+        })
       } # close if
       
     }) #close try
@@ -499,15 +529,7 @@ observe({
                        choices =  names(overall_vars$scores), 
                        server = TRUE)
   
-  try({
-    if (length(grep("roc",input$select_dea_gsea)) == 1){
-      
-      opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)")
-    }
-    else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value")}
-    
-    updateSelectInput(session, "gsea_ordering",choices = opts)
-  })
+  
   
   updateSelectInput(session, "select_dea_gsea",choices = names(overall_vars$dea))
   
