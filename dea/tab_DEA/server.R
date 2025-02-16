@@ -50,37 +50,43 @@ get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
       
       log2FC_mean_all_genes <- c()
       log2FC_median_all_genes <- c()
+      snr_all_genes <- c()
       print("Organizing final table...")
       for (n in 1:dim(markers)[1]){
         gene_name <- rownames(markers)[n]
         
-        
-        
         meanGroup1 <- log2(mean((2**mat[gene_name, group1])-1) + 10^-9)
         meanGroup2 <- log2(mean((2**mat[gene_name, group2])-1) + 10^-9)
         
-   
-        
         medianGroup1<- log2(median((2**mat[gene_name, group1])-1) + 10^-9)
-        medianGroup2 <- log2(median((2**mat[gene_name, group1])-1) + 10^-9)
+        medianGroup2 <- log2(median((2**mat[gene_name, group2])-1) + 10^-9)
+        
+        sigma1 <- sd(2**mat[gene_name, group1])
+        sigma2 <- sd(2**mat[gene_name, group2]) 
         
         log2FC_mean <- meanGroup1 - meanGroup2
         #if (is.na(log2FC_mean)){log2FC_mean <- 0} 
         log2FC_median <- medianGroup1 - medianGroup2
         
+        snr <- (meanGroup1 - meanGroup2)/(sigma1 + sigma2 + 10^-9)  # Small constant to avoid division by zero
+        
         log2FC_mean_all_genes <- c(log2FC_mean_all_genes, round(log2FC_mean,3))
         log2FC_median_all_genes <- c(log2FC_median_all_genes, round(log2FC_median, 3))
+        snr_all_genes <- c(snr_all_genes, round(snr, 3))
       }
+       
+    
       
       if (method == "roc"){
         final_markers <- data.frame(
           gene = rownames(markers),
           AUC = markers$myAUC,
           Power = markers$power,
-          pct.1 = (markers$pct.1)*100,
-          pct.2 = (markers$pct.2)*100,
+          pct.1 = round((markers$pct.1)*100, 3),
+          pct.2 = round((markers$pct.2)*100,3),
           log2FC_mean = log2FC_mean_all_genes,
-          log2FC_median = log2FC_median_all_genes
+          log2FC_median = log2FC_median_all_genes,
+          SNR = snr_all_genes 
         )
         
         colnames(final_markers) <- c("Gene",
@@ -89,17 +95,19 @@ get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
                                      "Percentage expressing cells (Target)",
                                      "Percentage expressing cells (Other)",
                                      "Log2FC (mean)",
-                                     "Log2FC (median)")
+                                     "Log2FC (median)",
+                                     "SNR")
       }
       
       else {
         final_markers <- data.frame(
           gene = rownames(markers),
           adj_pvalue = markers$p_val_adj,
-          pct.1 = (markers$pct.1)*100,
-          pct.2 = (markers$pct.2)*100,
+          pct.1 = round((markers$pct.1)*100,3),
+          pct.2 = round((markers$pct.2)*100,3),
           log2FC_mean = log2FC_mean_all_genes,
-          log2FC_median = log2FC_median_all_genes
+          log2FC_median = log2FC_median_all_genes,
+          SNR = snr_all_genes 
         )
         
         colnames(final_markers) <- c("Gene",
@@ -107,7 +115,8 @@ get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
                                      "Percentage expressing cells (Target)",
                                      "Percentage expressing cells (Other)",
                                      "Log2FC (mean)",
-                                     "Log2FC (median)")
+                                     "Log2FC (median)",
+                                     "SNR")
       }
       
       return(final_markers)
@@ -173,7 +182,7 @@ get_groups_dea <- function(group, grouping, metadata){
 
 make_volcano <- function(df, ID, gene_label, pval, logFC) {
   
-  df$pval <- -log10(df[["Adjusted p-value"]] +10**-100)
+  df$pval <- -log10(df[["Adjusted p-value"]] + 10**-100)
   df$logfc <- df[["Log2FC (mean)"]]
   
   gene_names <- df$Gene
@@ -351,4 +360,6 @@ ggheatmap::ggheatmap(data = mat,
     )
   )
 }
+
+
 

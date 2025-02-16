@@ -1,5 +1,10 @@
 #INFORMATION-----------------------------
 
+# updated on the appserver 
+
+
+
+
 #LOAD LIBRARIES ------------------------
 library(data.table)
 library(DT)
@@ -26,6 +31,14 @@ library(shinythemes)
 library(stringi)
 library(stringr)
 library(tools)
+
+#library(markdown)
+#library(scico)
+#library(dqshiny)
+#library(scater)
+#library(scDblFinder)
+#library(scran)
+#library(limma)
 
 print("Sucessfully loaded libraries.")
 
@@ -70,7 +83,7 @@ tags$head(
 ## navbarPage --------------------------------------- 
   navbarPage("scStudio: DEA",
           tabPanel("Gene Ranking",
-                     tab_DEA)
+                     tab_DEA),
       )#close navbarPage 
   
 ) #close UI 
