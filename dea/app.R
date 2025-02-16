@@ -2,9 +2,6 @@
 
 # updated on the appserver 
 
-
-
-
 #LOAD LIBRARIES ------------------------
 library(data.table)
 library(DT)
@@ -83,7 +80,7 @@ tags$head(
 ## navbarPage --------------------------------------- 
   navbarPage("scStudio: DEA",
           tabPanel("Gene Ranking",
-                     tab_DEA),
+                     tab_DEA)
       )#close navbarPage 
   
 ) #close UI 
