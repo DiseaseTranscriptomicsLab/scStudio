@@ -28,4 +28,4 @@ jobs:
         context: ./dea    
         file: ./dea/Dockerfile  
         push: true
-        tags: ${{ secrets.DOCKERHUB_MB_USERNAME }}/scstudio-dea:1.3
+        tags: ${{ secrets.DOCKERHUB_MB_USERNAME }}/scstudio-dea:1.4
