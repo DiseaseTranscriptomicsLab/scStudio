@@ -28,4 +28,4 @@ jobs:
         context: ./fea    
         file: ./fea/Dockerfile  
         push: true
-        tags: ${{ secrets.DOCKERHUB_MB_USERNAME }}/scstudio-fea:1.2
+        tags: ${{ secrets.DOCKERHUB_MB_USERNAME }}/scstudio-fea:1.3
