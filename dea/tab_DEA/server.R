@@ -308,7 +308,13 @@ make_heatmap <- function(mat, genes, group1, group2, cluster, scale){
       clust_cols <- TRUE
     }
 
+metadata <- rep("remove", ncol(mat))  
+
+print("HERE1")
+
 mat <- mat[genes,c(group1,group2)]
+
+print("HERE2")
   
 Group <- c("green","red")
 
@@ -316,16 +322,20 @@ names(Group) <- c("Group 1","Group 2")
 
 col <- list(Group = Group)
 
-
-metadata <- colnames(mat)
-
 metadata[group1] <- "Group 1"
 
 metadata[group2] <- "Group 2"
+
+metadata <- metadata[metadata != "remove"]
+
+print("HERE3")
   
 col_metaData <- data.frame(Group = metadata)
 
+print("HERE4")
 rownames(col_metaData) <- colnames(mat)
+
+print("HERE5")
 
 col_metaData <- col_metaData[order(col_metaData$Group),, drop = FALSE]
 
@@ -335,14 +345,25 @@ colnames(mat) <- order(as.character(seq(1, ncol(mat))))
 
 rownames(col_metaData) <- colnames(mat)
 
-if (scale == "none") {legend_name <- "log2(counts + 1)"
-} else {legend_name <- "Z-score"}
+if (scale == "none") {legend_name <- "log2(counts + 1)"} 
+else if (scale == "row") {
+  legend_name <- "Scaled counts"
+  mat <- t(scale(t(mat)))
+  mat <- scale_matrix_rows(mat)
+}
+else{ 
+  legend_name <- "Scaled counts"
+  mat <- scale_matrix_columns(mat)
+}
+
+print("HERE6")
+print(rownames(mat))
 
 ggheatmap::ggheatmap(data = mat,
           color = colorRampPalette(c( "#0000ff","#fad541","#b60404"))(100),
           cluster_rows = clust_rows,
           cluster_cols = clust_cols,
-          scale = scale,
+          #scale = scale,
           legendName = legend_name,
           text_position_rows = "left",
           annotation_cols = col_metaData,
@@ -359,6 +380,28 @@ ggheatmap::ggheatmap(data = mat,
           legend.text = element_text(size= 18))
     )
   )
+}
+
+min_max_scale <- function(x, new_min = 0, new_max = 1) {
+  (x - min(x)) / (max(x) - min(x)) * (new_max - new_min) + new_min
+}
+
+scale_matrix_rows <- function(mat, new_min = -1, new_max = 1) {
+  t(apply(mat, 1, min_max_scale, new_min = new_min, new_max = new_max))
+}
+
+#scale_matrix_columns <- function(mat, new_min = -1, new_max = 1) {
+#  apply(mat, 2, min_max_scale, new_min = new_min, new_max = new_max)
+#}
+
+scale_matrix_columns <- function(mat, new_min = -1, new_max = 1) {
+  apply(mat, 2, function(x) {
+    if (length(unique(x)) == 1) {
+      rep(new_min, length(x))  # Set all values to new_min (0)
+    } else {
+      (x - min(x)) / (max(x) - min(x)) * (new_max - new_min) + new_min
+    }
+  })
 }
 
 

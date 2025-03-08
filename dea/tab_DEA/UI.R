@@ -55,7 +55,7 @@ tab_DEA<- tabItem(
                  
                  h4("Volcano plot"),
                  
-                 sliderInput(inputId = "volcano_pvalue", "Adjusted p-value", 
+                 sliderInput(inputId = "volcano_pvalue", "-log10(Adjusted p-value)", 
                              min = 0, max = 100, step = 0.01 , value = 1.30103, ticks = TRUE),
                  
                  sliderInput(inputId = "volcano_fc", "Average Log2FC", 
@@ -67,7 +67,7 @@ tab_DEA<- tabItem(
                            value = 5),
                  
                  radioButtons( inputId = "dea_scale_heatmap",
-                               label = "Scale:",
+                               label = "Min-Max scaling:",
                                choices = c("row", "column", "none"),
                                selected = "none",
                                inline = TRUE),
