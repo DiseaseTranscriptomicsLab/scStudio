@@ -310,11 +310,11 @@ make_heatmap <- function(mat, genes, group1, group2, cluster, scale){
 
 metadata <- rep("remove", ncol(mat))  
 
-print("HERE1")
+
 
 mat <- mat[genes,c(group1,group2)]
 
-print("HERE2")
+
   
 Group <- c("green","red")
 
@@ -328,14 +328,14 @@ metadata[group2] <- "Group 2"
 
 metadata <- metadata[metadata != "remove"]
 
-print("HERE3")
+
   
 col_metaData <- data.frame(Group = metadata)
 
-print("HERE4")
+
 rownames(col_metaData) <- colnames(mat)
 
-print("HERE5")
+
 
 col_metaData <- col_metaData[order(col_metaData$Group),, drop = FALSE]
 
@@ -356,8 +356,7 @@ else{
   mat <- scale_matrix_columns(mat)
 }
 
-print("HERE6")
-print(rownames(mat))
+
 
 ggheatmap::ggheatmap(data = mat,
           color = colorRampPalette(c( "#0000ff","#fad541","#b60404"))(100),
