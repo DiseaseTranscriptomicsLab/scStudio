@@ -3,7 +3,7 @@
 ##              DEA TAB                ##
 ##-------------------------------------##
 
-# OPTIMIZE get_groups_dea with DPLYR 
+
 
 get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
     
