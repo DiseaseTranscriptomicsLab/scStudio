@@ -240,8 +240,8 @@ color: #fff;
 /* section 1: the hero at top of homepage*/ 
 
 .hero{
-  /* Using "linear-gradient" to add gradient to the image. This will make the text easier to read */
-  background-image: linear-gradient(to bottom right, #09A389, rgba(0, 0, 0, 0)), url("cells-background.jpg");
+  
+  background-image:  url("cells-logo.png");
 
  /* Set a specific height/add padding */
   height: 50%;
