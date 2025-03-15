@@ -28,4 +28,4 @@ jobs:
         context: ./home       
         file: ./home/Dockerfile  
         push: true
-        tags: martabica/scstudio-home:1.1
+        tags: martabica/scstudio-home:1.2
