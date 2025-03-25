@@ -44,26 +44,26 @@ tab_DEA<- tabItem(
                  
                  actionButton(inputId = "run_dea", "Run DEA"),
                  
-                 h3("Plotting"),
+                  
+                 
+                 h2("Plotting"),
                  
                  selectInput(inputId = "select_dea", label = "Select DEA", 
                              choices = c("-"), multiple = FALSE, width = "100%"),
+                  
                  
-                 h4("Scatter Plot"),
+                 h3("Scatter Plot"),
                  
                  textInput(inputId = "dea_cutoff", label = "Expressing cells cutoff (%)", value = 90),
                  
-                 h4("Volcano plot"),
+                  
                  
-                 sliderInput(inputId = "volcano_pvalue", "-log10(Adjusted p-value)", 
-                             min = 0, max = 100, step = 0.01 , value = 1.30103, ticks = TRUE),
+                 h3("Heatmap"),
                  
-                 sliderInput(inputId = "volcano_fc", "Average Log2FC", 
-                             min = 0, max = 10, step = 0.05 , value = 1, ticks = TRUE),
+                 selectInput(inputId = "heatmap_metric", label = "Order by:", 
+                             choices = c("-"), multiple = FALSE, width = "100%"),
                  
-                 h4("Heatmap"),
-                 
-                 textInput(inputId = "heatmap_topGenes", label = "Top genes (average Log2FC):",
+                 textInput(inputId = "heatmap_topGenes", label = "Top genes:",
                            value = 5),
                  
                  radioButtons( inputId = "dea_scale_heatmap",
@@ -76,9 +76,21 @@ tab_DEA<- tabItem(
                                label = "Cluster:",
                                choices = c("row","column", "both", "none"),
                                selected = "none",
-                               inline = TRUE)
+                               inline = TRUE),
+                
                  
-                 #actionButton(inputId = "go_plot_dea", "Plot results")
+                 h3("Volcano plot"),
+                 
+                 selectInput(inputId = "volcano_X", label = "x-axis:", 
+                             choices = c("-"), multiple = FALSE, width = "100%"),
+                 
+                 selectInput(inputId = "volcano_Y", label = "y-axis:", 
+                             choices = c("-"), multiple = FALSE, width = "100%"),
+                 
+                 uiOutput("volcano_X_limits"),
+                 uiOutput("volcano_Y_limits")
+                 
+        
   ), #close sidebarPanel
   
   mainPanel(
@@ -116,7 +128,7 @@ tab_DEA<- tabItem(
            actionButton("get_volcano", "Generate Volcano Plot"),
            box(withSpinner(
              plotlyOutput(outputId = "volcano_dea", 
-                          height = 500), 
+                          height = 800), 
              type = 5),
              width = NULL)
     ) #close column

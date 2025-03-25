@@ -3,7 +3,7 @@
 ##              DEA TAB                ##
 ##-------------------------------------##
 
-
+# OPTIMIZE get_groups_dea with DPLYR 
 
 get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
     
@@ -80,8 +80,8 @@ get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
       if (method == "roc"){
         final_markers <- data.frame(
           gene = rownames(markers),
-          AUC = markers$myAUC,
-          Power = markers$power,
+          AUC = round(markers$myAUC, 3),
+          Power = round(markers$power,3),
           pct.1 = round((markers$pct.1)*100, 3),
           pct.2 = round((markers$pct.2)*100,3),
           log2FC_mean = log2FC_mean_all_genes,
@@ -180,90 +180,161 @@ get_groups_dea <- function(group, grouping, metadata){
 }
 
 
-make_volcano <- function(df, ID, gene_label, pval, logFC) {
+get_metric <- function(df, metric){
+  if (metric == "-log10(Adjusted p-value)"){
+    return (-log10(df[["Adjusted p-value"]] + 10**-100))
+  }
+  else if (metric == "Average Log2FC"){
+    return(df[["Log2FC (mean)"]])
+  }
   
-  df$pval <- -log10(df[["Adjusted p-value"]] + 10**-100)
-  df$logfc <- df[["Log2FC (mean)"]]
+  else(
+    return(df[[metric]])
+  )
+}
+
+
+make_volcano <- function(df, ID, volcano_X, volcano_Y, xinter, yinter) {
+  
+  df$x_axis <- get_metric(df, volcano_X)
+  df$y_axis <- get_metric(df, volcano_Y)
+  
+  if (volcano_X == "AUC"){xinter <- 0.5}
+  if (volcano_Y == "AUC"){yinter <- 0.5}
   
   gene_names <- df$Gene
   
-  ggplot(df) +
-    geom_point(aes(text= gene_names, x = logfc, y = pval, col = gene_label), alpha = 0.5) + 
+  gene_label <- rep("cell", dim(df)[1])
+  
+  if (volcano_X %in% c( "-log10(Adjusted p-value)", "AUC", "Power") & 
+      volcano_Y %in% c( "-log10(Adjusted p-value)", "AUC", "Power")){
+    
+    gene_label[df$y_axis > yinter &
+                 df$x_axis > xinter] <- "UP"
+    
+    if(volcano_Y == "AUC" & volcano_X != "AUC"){
+    gene_label[df$y_axis <= yinter &
+                 df$x_axis >= xinter] <- "DOWN"
+    }
+    
+    else if(volcano_Y == "AUC" & volcano_X == "AUC"){
+      gene_label[df$y_axis < yinter & 
+                   df$x_axis < xinter] <- "DOWN"
+    }
+    
+    else if(volcano_Y != "AUC" & volcano_X == "AUC"){
+      gene_label[df$y_axis > yinter &
+                   df$x_axis <= xinter] <- "DOWN"
+    }
+    
+  }
+  
+  else if (volcano_X %in% c( "-log10(Adjusted p-value)", "AUC", "Power")){
+    
+    gene_label[df$y_axis > yinter &
+                 df$x_axis > xinter] <- "UP"
+    
+    if(volcano_X != "AUC"){
+    gene_label[df$y_axis <= -yinter &
+                 df$x_axis > xinter] <- "DOWN"}
+    else{
+      gene_label[df$y_axis <= -yinter &
+                   df$x_axis < xinter] <- "DOWN"}
+    
+    }
+  
+  else if (volcano_Y %in% c( "-log10(Adjusted p-value)", "AUC", "Power")){
+    
+    gene_label[df$y_axis > yinter &
+                 df$x_axis > xinter] <- "UP"
+    
+    if(volcano_Y != "AUC"){
+    gene_label[df$y_axis > yinter &
+                 df$x_axis <= -xinter] <- "DOWN"
+    }
+    else{gene_label[df$y_axis < yinter &
+                      df$x_axis <= -xinter] <- "DOWN"}
+  }
+  
+  else {
+    gene_label[df$y_axis > yinter &
+                 df$x_axis > xinter] <- "UP"
+    
+    gene_label[df$y_axis <= -yinter &
+                 df$x_axis <= -xinter] <- "DOWN"
+  }
+  
+  label_X <- volcano_X
+  label_Y <- volcano_Y
+  
+  if (label_X == "Power"){label_X <- "Predictive power score"}
+  if (label_Y == "Power"){label_Y <- "Predictive power score"}
+  
+  p <- ggplot(df) +
+    geom_point(aes(text= gene_names, x = x_axis, y = y_axis, col = gene_label), alpha = 0.5) + 
     theme_minimal() + 
     ggtitle(ID) +
-    xlab("Average Log2FC") + 
-    ylab("-log10(Adjusted p-value)") +
-    theme(legend.position = "none", text = element_text(size=15))  +
-    geom_label_repel(aes(x = logfc, y = pval, 
-                         label = ifelse(gene_label == "UP" | gene_label == "DOWN",  
-                                                      "" ,"")), size = 5,
-                      max.overlaps = 5) + 
+    xlab(label_X) + 
+    ylab(label_Y) +
+    theme(legend.position = "none", text = element_text(size=15)) +
+
     scale_color_manual(values=c("grey45", "red", "green")) +
     
-    geom_hline(yintercept = pval, linetype="dashed", 
+    geom_hline(yintercept = yinter, linetype="dashed", 
                color = "blue", size = 0.5) +
     
-    geom_vline(xintercept = logFC, linetype="dashed", 
-               color = "blue", size = 0.5) +
+    geom_vline(xintercept = xinter, linetype="dashed", 
+               color = "blue", size = 0.5) 
     
-    geom_vline(xintercept = -logFC, linetype="dashed", 
-               color = "blue", size = 0.5)
-}
+   if (volcano_X %in% c( "-log10(Adjusted p-value)", "AUC", "Power") & 
+       volcano_Y %in% c( "-log10(Adjusted p-value)", "AUC", "Power")){
 
-#make_heatmap <- function(mat, genes, scale, cluster, token, selected_cols, group1, group2){
-#  if (cluster == "none"){
-#    cluster <- NULL
-#    clust_rows <- FALSE
-#    clust_cols <- FALSE
-#  }
-#  else if (cluster == "row"){
-#    clust_rows <- TRUE
-#    clust_cols <- FALSE
-#  }
-#  else if (cluster == "column"){
-#    clust_rows <- FALSE
-#    clust_cols <- TRUE
-#  }
-#  else {
-#    clust_rows <- TRUE
-#    clust_cols <- TRUE
-#  }
-#  
-#  mat <- mat[genes,c(group1,group2)]#
-#
-#  
-#  cols <- rep("grey", ncol(mat))
-#  cols[c(1:length(group1))] <- selected_cols[1]
-#  cols[c(length(group1)+1:length(group2))] <- selected_cols[2]#
-#
-#  heatmap.2(x= mat, 
-#            dendrogram = cluster,
-#            scale = scale,
-#            col="bluered",
-#            Rowv= clust_rows, 
-#            Colv = clust_cols,
-#            trace="none",
-#            ColSideColors = cols,
-#            labRow=rownames(mat),
-#            main="",
-#            ylab="",
-#            key.title = NA,
-#            keysize = 1.5,
-#            labCol = FALSE,
-#            cexRow = 1.5,
-#            margins = c(10, 20),
-#            xlab="")
-#  
-#  legend("topright", title = "Group",legend= c("Group 1", "Group 2"), 
-#         fill = selected_cols, cex=1, box.lty=0)
-#}
+    return(p)}
+  
+  else if (volcano_X %in% c( "-log10(Adjusted p-value)", "AUC", "Power")){
+    return(p + geom_hline(yintercept = -yinter, linetype="dashed", color = "blue", size = 0.5))}
+  
+  else if (volcano_Y %in% c( "-log10(Adjusted p-value)", "AUC", "Power")){
+    return(p + geom_vline(xintercept = -xinter, linetype="dashed", color = "blue", size = 0.5))}
+  
+  else {
+    return(p + 
+             geom_vline(xintercept = -xinter, linetype="dashed", color = "blue", size = 0.5) +
+             geom_hline(yintercept = -yinter, linetype="dashed", color = "blue", size = 0.5))}
 
-
-get_top_genes <- function(tb, nr){
-  tb <- tb[order(tb[["Log2FC (mean)"]], decreasing = TRUE),]
-  genes <- tb$Gene[1:nr]
-  tb <- tb[order(tb[["Log2FC (mean)"]], decreasing = FALSE),]
-  genes <- c(genes, tb$Gene[1:nr])
+  } #close make_volcano  
+  
+get_top_genes <- function(tb, nr, metric){
+  
+  if (metric == "Average Log2FC"){
+    tb <- tb[order(tb[["Log2FC (mean)"]], decreasing = TRUE),]
+    genes <- tb$Gene[1:nr]
+    tb <- tb[order(tb[["Log2FC (mean)"]], decreasing = FALSE),]
+    genes <- c(genes, tb$Gene[1:nr])
+  }
+  
+  else if (metric == "AUC"){
+    tb <- tb[order(tb[["AUC"]], decreasing = TRUE),]
+    genes <- tb$Gene[1:nr]
+    tb <- tb[order(tb[["AUC"]], decreasing = FALSE),]
+    genes <- c(genes, tb$Gene[1:nr])  
+  }
+  else if (metric == "Power"){
+    tb <- tb[order(tb[["Power"]], decreasing = TRUE),]
+    genes <- tb$Gene[1:nr]
+  }
+  else if (metric == "-log10(Adjusted p-value)"){
+    tb$metric <- -log10(tb[["Adjusted p-value"]] + 10**-100)
+    tb <- tb[order(tb[["metric"]], decreasing = TRUE),]
+    genes <- tb$Gene[1:nr]
+  }
+  else if (metric == "SNR"){
+    tb <- tb[order(tb[["SNR"]], decreasing = TRUE),]
+    genes <- tb$Gene[1:nr]
+    tb <- tb[order(tb[["SNR"]], decreasing = FALSE),]
+    genes <- c(genes, tb$Gene[1:nr]) 
+  }
+  
 }
 
 make_dea_scatter <- function(dea, cutoff){
@@ -311,11 +382,8 @@ make_heatmap <- function(mat, genes, group1, group2, cluster, scale){
 metadata <- rep("remove", ncol(mat))  
 
 
-
 mat <- mat[genes,c(group1,group2)]
 
-
-  
 Group <- c("green","red")
 
 names(Group) <- c("Group 1","Group 2")
@@ -327,15 +395,10 @@ metadata[group1] <- "Group 1"
 metadata[group2] <- "Group 2"
 
 metadata <- metadata[metadata != "remove"]
-
-
   
 col_metaData <- data.frame(Group = metadata)
 
-
 rownames(col_metaData) <- colnames(mat)
-
-
 
 col_metaData <- col_metaData[order(col_metaData$Group),, drop = FALSE]
 
@@ -355,7 +418,6 @@ else{
   legend_name <- "Scaled counts"
   mat <- scale_matrix_columns(mat)
 }
-
 
 
 ggheatmap::ggheatmap(data = mat,

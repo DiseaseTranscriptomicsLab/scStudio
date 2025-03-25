@@ -2,6 +2,9 @@
 
 # updated on the appserver 
 
+
+
+
 #LOAD LIBRARIES ------------------------
 library(data.table)
 library(DT)
@@ -80,7 +83,7 @@ tags$head(
 ## navbarPage --------------------------------------- 
   navbarPage("scStudio: DEA",
           tabPanel("Gene Ranking",
-                     tab_DEA)
+                     tab_DEA),
       )#close navbarPage 
   
 ) #close UI 
@@ -240,7 +243,34 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
                  options <- c(options, var)} #close if
              } #close for
              
+             if ("dea.rds" %in% files){
+               overall_vars$dea <- upload_session(overall_vars$session_token, "dea")
+             } #close if 
+             else {overall_vars$dea <- list()
+             save_session(overall_vars$session_token ,overall_vars, "dea")}
+             
+             overall_vars$md5$dea <- md5sum(
+               paste0(getwd(),"/tokens/", overall_vars$session_token, "/dea.rds"))
+             
+             vars <- colnames(overall_vars$metadata) ###IMPROVE
+             options <- c()
+             for (var in vars){
+               if (!is.numeric(overall_vars$metadata[[var]])) {
+                 options <- c(options, var)} #close if
+             } #close for
+             
              updateSelectInput(session, "dea_condition",choices = options)
+             
+            # try({
+            #   if (length(grep("roc",input$select_dea)) == 1){
+            #     
+            #     opts <- c("AUC", "Average Log2FC","-log10(adjusted p-value)", "SNR")
+            #   }
+            #   else { opts <- c("Average Log2FC","-log10(adjusted p-value)", "SNR")}
+            #   
+            #   updateSelectInput(session, "volcano_X",choices = opts, selected = "Average Log2FC")
+            #   updateSelectInput(session, "volcano_Y",choices = opts, selected = "-log10(adjusted p-value)")
+            # })
              
         } #close if 
        
@@ -369,6 +399,17 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
            
            updateSelectInput(session, "dea_condition",choices = options)
            
+           #try({
+          #   if (length(grep("roc",input$select_dea)) == 1){
+          #     
+          #     opts <- c("AUC", "Average Log2FC","-log10(adjusted p-value)", "SNR")
+          #   }
+          #   else { opts <- c("Average Log2FC","-log10(adjusted p-value)", "SNR")}
+          #   
+          #   updateSelectInput(session, "volcano_X",choices = opts, selected = "Average Log2FC")
+          #   updateSelectInput(session, "volcano_Y",choices = opts, selected = "-log10(adjusted p-value)")
+          # })
+           
            
            
           incProgress(1, detail = "Done.")
@@ -474,6 +515,119 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
    }) # close create new session   
    
 # UPDATE INPUT OPTIONS/PLOTS ---------------------------------------------------
+   observeEvent(input$select_dea, {
+     isolate(output$table_dea <- DT::renderDataTable({ 
+       
+       table <- overall_vars$dea[[input$select_dea]]
+       
+       table <- table[order(table[["Log2FC (mean)"]], decreasing = TRUE),]
+       
+       DT::datatable({ table },
+                     extensions = 'Buttons',
+                     rownames= FALSE,
+                     options = list(
+                       paging = TRUE,
+                       searching = TRUE,
+                       fixedColumns = FALSE,
+                       autoWidth = FALSE,
+                       ordering = TRUE,
+                       dom = 'Bfrtip',
+                       lengthMenu=c(10,20,50),
+                       buttons = c('copy', 'csv', 'excel')),
+                     
+                     class = "display")}, 
+       selection = 'single', server = FALSE)
+     )#close isolate
+     
+     try({
+       if (length(grep("roc",input$select_dea)) == 1){
+         
+         opts <- c("AUC", "Average Log2FC","Power", "SNR")
+       }
+       else { opts <- c("Average Log2FC","-log10(Adjusted p-value)", "SNR")}
+       
+       updateSelectInput(session, "volcano_X",choices = opts, selected = "Average Log2FC")
+       updateSelectInput(session, "volcano_Y",choices = opts, selected = "SNR")
+       updateSelectInput(session, "heatmap_metric",choices = opts, selected = "SNR")
+     })
+     
+     
+     
+   })
+   
+   observeEvent(input$volcano_X,{
+     if (input$volcano_X == "-log10(Adjusted p-value)"){
+       
+       output$volcano_X_limits <- renderUI( 
+         sliderInput(inputId = "volcano_X_limits", "-log10(Adjusted p-value)", 
+                     min = 0, max = 100, step = 0.01 , value = 1.30103, ticks = TRUE))
+     } #close if 
+     
+     else if (input$volcano_X == "SNR" ){
+       
+       output$volcano_X_limits <-  renderUI( 
+         sliderInput(inputId = "volcano_X_limits", "|SNR|", 
+                     min = 0, max = 25, step = 0.01 , value = 1, ticks = TRUE))
+     } #close else if
+     
+     else if (input$volcano_X == "Average Log2FC" ){
+       
+       output$volcano_X_limits <-  renderUI( 
+         sliderInput(inputId = "volcano_X_limits", "|Average Log2FC|", 
+                     min = 0, max = 25, step = 0.05 , value = 1, ticks = TRUE))
+     } #close else if
+     
+     else if (input$volcano_X == "AUC" ){
+       
+       output$volcano_X_limits <-  NULL
+    
+     }
+     
+     else if (input$volcano_X == "Power" ){
+       
+       output$volcano_X_limits <-  renderUI( 
+         sliderInput(inputId = "volcano_X_limits", "Power", 
+                     min = 0, max = 1, step = 0.001 , value = 0.5, ticks = TRUE))
+     }
+     
+   })
+   
+   observeEvent(input$volcano_Y,{
+     
+     if (input$volcano_Y == "-log10(Adjusted p-value)"){
+       
+       output$volcano_Y_limits <- renderUI( 
+         sliderInput(inputId = "volcano_Y_limits", "-log10(Adjusted p-value)", 
+                     min = 0, max = 100, step = 0.01 , value = 1.30103, ticks = TRUE))
+     } #close if 
+     
+     else if (input$volcano_Y == "SNR" ){
+       
+       output$volcano_Y_limits <-  renderUI( 
+         sliderInput(inputId = "volcano_Y_limits", "|SNR|", 
+                     min = 0, max = 25, step = 0.01 , value = 1, ticks = TRUE))
+     } #close else if
+     
+     else if (input$volcano_Y == "Average Log2FC" ){
+       
+       output$volcano_Y_limits <-  renderUI( 
+         sliderInput(inputId = "volcano_Y_limits", "|Average Log2FC|", 
+                     min = 0, max = 25, step = 0.05 , value = 1, ticks = TRUE))
+     } #close else if
+     
+     else if (input$volcano_Y == "AUC" ){
+       output$volcano_Y_limits <-  NULL
+       
+     }
+     
+     else if (input$volcano_Y == "Power" ){
+       
+       output$volcano_Y_limits <-  renderUI( 
+         sliderInput(inputId = "volcano_Y_limits", "Power", 
+                     min = 0, max = 1, step = 0.001 , value = 0.5, ticks = TRUE))
+     }
+   })
+   
   observe({
     
 ## running jobs --------------------------------------------      
@@ -527,10 +681,6 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
         paste0(getwd(),"/tokens/", overall_vars$session_token, "/hvgs.rds"))
       overall_vars$md5$hvgs <- md5_hvgs
       
-    #
-      #
-      #
-      
     }
     
   }, silent = FALSE)
@@ -548,6 +698,7 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
       overall_vars$md5$dea <- md5_dea
       
       updateSelectInput(session, "select_dea",choices = names(overall_vars$dea))
+      
    
       showNotification("New DEA available.")
     }
@@ -570,7 +721,7 @@ observe({
     options <- c()
     
     for (condition in input$dea_condition){
-      options <- c(options, as.character(overall_vars$metadata[,condition]))
+      options <- c(options, unique(as.character(overall_vars$metadata[,condition])))
     }
     
     updateSelectInput(session, "dea_group1",choices = options, selected = "")
@@ -578,30 +729,11 @@ observe({
     updateSelectInput(session, "dea_group2",choices = options, selected = "")
   })
   
-  isolate(output$table_dea <- DT::renderDataTable({ 
-    
-    table <- overall_vars$dea[[input$select_dea]]
-    
-    table <- table[order(table[["Log2FC (mean)"]], decreasing = TRUE),]
-    
-    DT::datatable({ table },
-                  extensions = 'Buttons',
-                  rownames= FALSE,
-                  options = list(
-                    paging = TRUE,
-                    searching = TRUE,
-                    fixedColumns = FALSE,
-                    autoWidth = FALSE,
-                    ordering = TRUE,
-                    dom = 'Bfrtip',
-                    lengthMenu=c(10,20,50),
-                    buttons = c('copy', 'csv', 'excel')),
-                  
-                  class = "display")}, 
-    selection = 'single', server = FALSE)
-  )#close isolate
+  
 
- 
+
+  
+  
 }) #close observe
  
    
@@ -650,31 +782,20 @@ observeEvent(input$run_dea, {
 observeEvent(input$get_volcano, {
   try({
   
-  ranking <- overall_vars$dea[[input$select_dea]]
-  ranking[["Adjusted p-value"]] <- -log10(ranking[["Adjusted p-value"]] +10**-100)
-  
-  gene_label <- rep("cell", dim(ranking)[1])
-  
-  
-  gene_label[ranking[["Adjusted p-value"]] > input$volcano_pvalue &
-               ranking[["Log2FC (mean)"]] >= input$volcano_fc] <- "UP"
-  
-  gene_label[ranking[["Adjusted p-value"]] > input$volcano_pvalue &
-               ranking[["Log2FC (mean)"]] <= -input$volcano_fc] <- "DOWN"
-  
   output$volcano_dea <- renderPlotly({
     
     req(input$select_dea)
     
-    isolate(p <- make_volcano(overall_vars$dea[[input$select_dea]], 
-                              input$select_dea, 
-                              gene_label, 
-                              as.numeric(input$volcano_pvalue),
-                              logFC = input$volcano_fc)
+    isolate(p <- make_volcano(df = overall_vars$dea[[input$select_dea]], 
+                              ID = input$select_dea, 
+                              volcano_X = input$volcano_X,
+                              volcano_Y = input$volcano_Y,
+                              xinter = input$volcano_X_limits,
+                              yinter = input$volcano_Y_limits)
     )#close isolate
     
     toWebGL(ggplotly(p, source = "main", key = "pointNumber", tooltip = "text") %>% 
-              layout(dragmode = "lasso", height = 400, 
+              layout(dragmode = "lasso", height = 600, 
                      legend = list(orientation = "h", x = 0, y = -0.2)))
   })
 }, silent = FALSE) #close try
@@ -686,8 +807,9 @@ observeEvent(input$get_heatmap,{
   print("Generating heatmap")
   output$heatmap_dea <- renderPlot({
     print("Getting top genes")
-    genes <- get_top_genes(overall_vars$dea[[input$select_dea]], 
-                           as.numeric(input$heatmap_topGenes))
+    genes <- get_top_genes(tb = overall_vars$dea[[input$select_dea]], 
+                           nr = as.numeric(input$heatmap_topGenes),
+                           metric = input$heatmap_metric)
     print("Getting ID")
     
     id <- remove_method_from_id(input$select_dea)
