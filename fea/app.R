@@ -16,7 +16,8 @@ library(gridExtra)
 library(Matrix)
 library(matrixStats)
 library(magrittr)
-library(msigdbr)
+#library(msigdbr)
+#library(msigdbdf)
 library(plotly)
 library(reshape2)
 library(scuttle)
@@ -99,7 +100,7 @@ server <- function(input, output, session) {
   }, silent = TRUE)
   
 # OVERALL SESSION VARIABLES -----------------------------------
-  overall_vars <- reactiveValues(metadata = data.frame())
+overall_vars <- reactiveValues(metadata = data.frame())
   
 # timer  ---------------------------------------------
 autoInvalidate <- reactiveTimer(30000)  
@@ -131,6 +132,7 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
 
 ## ok_upload_session --------------------------------   
    observeEvent(input$ok_upload_session, {
+     print("BUTTON PUSHED")
 ### zip modality -------------------------------------    
      if (!is.null(input$upload_session_zip)) {
        
@@ -190,15 +192,6 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
              else {overall_vars$dea <- list()
              save_session(overall_vars$session_token ,overall_vars, "dea")}
              
-             try({
-               if (length(grep("roc",input$select_dea_gsea)) == 1){
-                 
-                 opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)", "SNR")
-               }
-               else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value", "SNR")}
-               
-               updateSelectInput(session, "gsea_ordering",choices = opts)
-             })
              
              overall_vars$md5$dea <- md5sum(
                paste0(getwd(),"/tokens/", overall_vars$session_token, "/dea.rds"))
@@ -227,6 +220,7 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
 ## token modality -------------------------------------      
      # Check that token exists
      else if (!is.null(input$upload_token)) {
+
        removeModal()
        
        upload_token_in_dir <- input$upload_token %in% list.dirs(path = "./tokens/", full.names = FALSE)[-1]
@@ -234,7 +228,9 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
        if (!upload_token_in_dir ) {showModal(uploadModal(failed = TRUE))}
        
        else{
+   
          removeModal()
+  
          
          overall_vars$session_token <- input$upload_token
            
@@ -283,15 +279,6 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
            overall_vars$md5$dea <- md5sum(
              paste0(getwd(),"/tokens/", overall_vars$session_token, "/dea.rds"))
            
-           try({
-             if (length(grep("roc",input$select_dea_gsea)) == 1){
-               
-               opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)", "SNR")
-             }
-             else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value", "SNR")}
-             
-             updateSelectInput(session, "gsea_ordering",choices = opts)
-           })
            
            if ("scores.rds" %in% files){
              overall_vars$scores <- upload_session(overall_vars$session_token, "scores")
@@ -408,7 +395,19 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
    }) # close create new session   
    
 # UPDATE INPUT OPTIONS/PLOTS ---------------------------------------------------
-  observe({
+  observeEvent(input$select_dea_gsea, {
+
+      if (length(grep("roc",input$select_dea_gsea)) == 1){
+        
+        opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)", "SNR", "|SNR|")
+      }
+      else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value", "SNR", "|SNR|")}
+      
+      updateSelectInput(session, "gsea_ordering",choices = opts)
+  })
+   
+   
+   observe({
     
 ## running jobs --------------------------------------------      
     autoInvalidate()
@@ -421,6 +420,8 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
       print(job)
       try(print(overall_vars$jobs[[job]]$get_result()), silent = FALSE)
     }
+    
+
     
 ## md5sum checks --------------------------------------------------------------
     
@@ -448,32 +449,24 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
       if (check_md5sum_dea != overall_vars$md5$dea){
         overall_vars$dea <- upload_session(overall_vars$session_token, "dea")
         
-        try({
-          if (length(grep("roc",input$select_dea_gsea)) == 1){
-            
-            opts <- c("AUC", "Power", "Log2FC (mean)", "Log2FC (median)", "SNR")
-          }
-          else { opts <- c("Log2FC (mean)", "Log2FC (median)", "Adjusted p-value", "SNR")}
-          
-          updateSelectInput(session, "gsea_ordering",choices = opts)
-        })
+        
       } # close if
       
     }) #close try
-  
+
 }) #close observe
   
 
    
 ## update inputs ----------------------------------------------------   
 observe({
-  
+
   if (input$select_database != "Custom"){
     
     output$gene_set <- NULL
     
-    get_categories <-  msigdbr_collections()
-    
+    get_categories <-  readRDS(paste0(getwd(), "/","/msigdbr_collections.rds"))
+
     if (input$select_database %in% c("H", "C1", "C6", "C8")){  
       options <- msigdbr(species = input$gset_scores_organism, category = input$select_database)
       options <- unique(options$gs_name)
@@ -535,7 +528,7 @@ observe({
   
   updateSelectInput(session, "select_gsea",choices = names(overall_vars$gsea))
   
- 
+
 }) #close observe
  
    
@@ -613,7 +606,7 @@ observeEvent(input$plot_gset_scores ,{
      
   if (length(input$select_gset_scores) > 1 ){
     
-    print("here")
+
         
     output$gset_heatmap <- bindEvent(renderPlot({
       

@@ -69,7 +69,7 @@ tab_SCORES <- tabItem(
                                           "IMMUNESIGDB",
                                           "VAX",
                                           "C8"),
-                              selected = "H"), 
+                              selected = "Custom"), 
                                      
                   uiOutput("gset_pathway"),
                                     

@@ -4,6 +4,8 @@
 ##-------------------------------------##
 
 get_gsea <- function(dea, ordering, organism, subcategories){
+  dea[["|SNR|"]] <- abs(dea$SNR)
+  
   dea <- dea[order(dea[[ordering]], decreasing = TRUE),]
   
   rank <- as.data.frame(cbind(dea$Gene, as.numeric(dea[[ordering]])))
@@ -17,7 +19,7 @@ get_gsea <- function(dea, ordering, organism, subcategories){
   
   
   chosen_gene_sets <- data.frame()
-  get_categories <-  msigdbr_collections()
+  get_categories <-  readRDS(paste0(getwd(), "/","/msigdbr_collections.rds"))
   
   for (subcat in subcategories){
     
