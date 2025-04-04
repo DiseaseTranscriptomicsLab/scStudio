@@ -35,6 +35,7 @@ RUN R -e 'install.packages("shinyjs", repos="https://packagemanager.rstudio.com/
 RUN R -e 'install.packages("shinythemes", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("stringi", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("stringr", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
+RUN R -e 'install.packages("uwot", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2025-03-27")'
 
 RUN R -e 'install.packages("BiocManager")'
 RUN R -e 'BiocManager::install("scater")'
