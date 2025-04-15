@@ -803,19 +803,16 @@ observe({
 
                 table <- overall_vars$mkgs[[name]]
                   
+                if ( input$select_dea_method_cgraph != "roc"){
                 filter <- table[,"Adjusted p-value"] <= as.numeric(input$adjP_cgraph)
-                  
+                table <- table[filter,]  
+                }
        
-                if (input$selected_cluster_cgraph == ""){
-            
+                if (input$selected_cluster_cgraph != ""){
                     
-                    table <- table[filter,]
+                  table <- table[table$Cluster == input$selected_cluster_cgraph & filter, ]
                 }
                 
-                else {
-                    table <- table[table$Cluster == input$selected_cluster_cgraph & filter, ]
-                    
-                }
                   
                 gene  <-  table[input$mkgs_cgraph_rows_selected,]$Gene
                   
