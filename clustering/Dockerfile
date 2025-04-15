@@ -42,8 +42,10 @@ RUN R -e 'install.packages("stringr", repos="https://packagemanager.rstudio.com/
 RUN R -e 'install.packages("BiocManager")'
 RUN R -e 'BiocManager::install("scuttle")'
 RUN R -e 'BiocManager::install("BiocSingular")'
+RUN R -e 'BiocManager::install("MAST")'
 RUN R -e 'install.packages("devtools")'
-RUN R -e 'remotes::install_github("ChristophH/gplots")'  
+RUN R -e 'remotes::install_github("ChristophH/gplots")'
+
         
 # Set the working directory
 WORKDIR /home/app
