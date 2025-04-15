@@ -863,7 +863,10 @@ observe({
                                                                  session_obj = overall_vars$mkgs, 
                                                                  token = overall_vars$session_token, 
                                                                  ID = input$select_clustering_analysis,
-                                                                 sres = input$resolution_cgraph))
+                                                                 sres = input$resolution_cgraph),
+                                                     stdout = "",  # Print to console
+                                                     stderr = ""   # Print errors to console
+                                                    )
 
      for (method in input$select_method_dea_cgraph){
        name <- paste(input$select_clustering_analysis, method, input$resolution_cgraph, sep ="_")
