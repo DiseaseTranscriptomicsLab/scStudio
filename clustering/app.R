@@ -662,14 +662,15 @@ observe({
 
     table <- overall_vars$mkgs[[name]]
     
+    if (input$select_dea_method_cgraph !="roc"){
     filter <- table[,"Adjusted p-value"] <= as.numeric(input$adjP_cgraph)
+    table <- table[filter,]
+    }
     
     if (input$selected_cluster_cgraph ==""){
       
-      print("No specific cluster selected.")
-      
       DT::datatable(
-        { table[filter,]},
+        { table},
         extensions = 'Buttons',
         rownames= FALSE,
         options = list(
@@ -687,7 +688,7 @@ observe({
     }
     else {
       DT::datatable(
-        { table[table$Cluster == input$selected_cluster_cgraph & filter, ] },
+        { table[table$Cluster == input$selected_cluster_cgraph, ] },
         
         extensions = 'Buttons',
         rownames= FALSE,
