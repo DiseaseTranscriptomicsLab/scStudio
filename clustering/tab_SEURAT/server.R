@@ -45,20 +45,6 @@ run_graph <- function(mat, pca, genesvspcs, features, dims, token, session_obj, 
   return(clusters)
 } #close run_graph
 
-
-
-#mat <- countMatrices$muSC_mat_norm
-#norm_mat <- (2**mat)-1
-#ln_mat <- log(norm_mat + 1)
-#srt <- Seurat::CreateSeuratObject(counts = ln_mat, min.cells = 0, min.features = 0)
-#ths <- 0.25
-#all_clusters <- clusters$clustering_1
-#session_obj <- clusters
-#token <- "k15nly"
-#ID <- "clustering_1"
-#methods <- c("MAST")
-
-
 run_marker_genes <- function(srt, mat, methods, ths, all_clusters, session_obj, token, ID, sres){
   library(spatstat.core)
   library(Seurat)
@@ -99,7 +85,7 @@ run_marker_genes <- function(srt, mat, methods, ths, all_clusters, session_obj, 
         log2FC_median_all_genes <- c(log2FC_median_all_genes, round(log2FC_median, 3))
       } #close for
       
-      
+      print(markers)
       if (method == "roc"){
         final_markers <- data.frame(
           gene = markers$gene,
@@ -123,7 +109,6 @@ run_marker_genes <- function(srt, mat, methods, ths, all_clusters, session_obj, 
       } #close if 
       
       else {
-        
         final_markers <- data.frame(
           gene = markers$gene,
           cluster = markers$cluster,
