@@ -22,7 +22,6 @@ library(stringi)
 library(stringr)
 library(tools)
 
-
 print("Sucessfully loaded libraries.")
 
 #LOAD TABS-------------------------------
@@ -594,6 +593,7 @@ observeEvent(input$save_new_annotation, {
      overall_vars$metadata[[paste(input$select_clustering_analysis, 
                                   input$select_clustering_annotation, sep = "_")]] <- var
      
+     save_session(overall_vars$session_token, overall_vars, "metadata")
      showNotification("Clustering analysis added to metadata.")
      
      #update select options    
