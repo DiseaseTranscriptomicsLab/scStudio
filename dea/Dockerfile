@@ -30,6 +30,7 @@ RUN R -e 'install.packages("gridExtra", repos="https://packagemanager.rstudio.co
 RUN R -e 'install.packages("magrittr", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2024-12-23")'
 RUN R -e 'install.packages("Matrix", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-01-20")'
 RUN R -e 'install.packages("matrixStats", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
+RUN R -e 'install.packages("memuse", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("plotly", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("reshape2", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("Seurat", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2022-05-20")'
