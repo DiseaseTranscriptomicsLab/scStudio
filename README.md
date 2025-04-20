@@ -32,7 +32,7 @@ scStudio enables the automatic retrieval of scRNA-seq data from GEO. To get star
 
 ![Alt text](images/GEO-upload.png)
    
-# Quality Control
+# Quality control
 
 ![Alt text](images/QC.png)
 
@@ -44,6 +44,26 @@ Doublet identification and removal is supported for droplet data:
 ![Alt text](images/doublets.png)
 
 **Note:** Doublet identification should be performed prior to the removal of poor-quality cells to accurately model the doublet profile. 
+
+# Normalization and batch effect correction
+ 
+We recommend first inspecting the proportion of variance in your count matrix that’s explained by each known variable such as batch, sequencing depth, or other experimental factors—using a variance‑explained plot. This step helps you identify non‑biological sources of variation that should be corrected during normalization and batch effect correction.
+![Alt text](images/variance-explained.png)
+
+# Feature selection and dimensionality reduction
+
+In this tab, users are able to first identify highly variable genes (HVGs) using a modeled mean-variance trend. The top HVGs can then be employed in downstream analyses, including dimensionality reduction and clustering, to mitigate noise from lowly expressed genes and/or genes with minimal biological variance.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
