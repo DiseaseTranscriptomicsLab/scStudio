@@ -7,24 +7,27 @@ scStudio is a user-friendly, comprehensive and modular web-based application des
 
 scStudio was developed as a web-based application using the R Shiny package (version 1.10.0). Each main analysis step is implemented as a separate Shiny app. This modular approach allows users to run multiple types of analyses simultaneously, each in its own dedicated app window. As different methods complete their computations, the results are automatically updated, ensuring that users have real-time access to their data and analyses. 
 
+[![Alt text](images/Homepage.png)](https://compbio.imm.medicina.ulisboa.pt/app/scStudio)
+
+
 To begin using scStudio, start by creating a working session in the Upload Data interface. This interface allows you to:
 
-*Retrieve datasets directly from GEO
+- Retrieve datasets directly from GEO
 
-*Upload your own data in various formats
+- Upload your own data in various formats
 
-*Load public working sessions from previously processed datasets
+- Load public working sessions from previously processed datasets
 
 Each session is assigned a unique token, which you can use to save and resume your analysis, share your session with others, or download your data files for local use.
 [IMPORTANT:] Sessions that remain inactive for over two weeks will be automatically removed from the server. If you wish to preserve your session for a longer period, please contact: ana.bica@gimm.pt.
 
-# Upload data interface
-
-## Gene Expression Omnibus interface
+# Gene Expression Omnibus interface
 
 scStudio enables the automatic retrieval of scRNA-seq data from GEO. To get started, simply enter the GEO accession ID of your dataset and click “Load.” Once the data is loaded, you can select the samples of interest and click “Add samples” to generate a unified count matrix for downstream analysis.
 
 Note: Currently supported data formats include tabular files (CSV, TSV, TXT), Excel spreadsheets (XLSX), Cell Ranger Market Exchange Format (MEX) files commonly used for 10X Genomics data, and HDF5 (.h5) files.
+
+![Alt text](images/GEO-upload.png)
    
 
 
