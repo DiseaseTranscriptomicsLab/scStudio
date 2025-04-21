@@ -3,6 +3,15 @@
 
 **scStudio** is a user-friendly, web-based application for comprehensive and modular scRNA-seq data analysis. It supports automatic data retrieval from GEO, custom data uploads, and integration of multiple datasets. With tools for quality control, normalization, clustering, differential expression, and enrichment analysis, it offers flexibility, session tracking, and sharing features—making advanced single-cell analysis accessible to a broad range of users.
 
+## 📑 Table of Contents
+
+- [Development](#development)
+- [Gene Expression Omnibus interface](#gene-expression-omnibus-interface)
+
+  
+
+
+
 # Development
 
 Each main analysis step is implemented as a separate Shiny app. This modular approach allows users to run multiple types of analyses simultaneously, each in its own dedicated app window. As different methods complete their computations, the results are automatically updated, ensuring that users have real-time access to their data and analyses. **[VIDEO TUTORIAL ON GETTING STARTED](link)**
@@ -109,7 +118,7 @@ Each scStudio module is packaged as a standalone Docker image and can be execute
 
 1. Ensure you have Docker installed on your machine. If not, you can download and install Docker from [here](https://www.docker.com/get-started).
 
-2. Pull the Docker image of the module that you would like to run. [Available images can be found here:](  https://hub.docker.com/repositories/martabica). For example, to start deploying the Data tab:  
+2. Pull the Docker image of the module that you would like to run. [Available images can be found here](  https://hub.docker.com/repositories/martabica). For example, to start deploying the Data tab:  
    ```bash
    docker pull martabica/scstudio-selectdata:1.1
    ```
