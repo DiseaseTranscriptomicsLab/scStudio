@@ -20,7 +20,7 @@ Each main analysis step is implemented as a separate Shiny app. This modular app
 
 Each session is assigned a unique token, which you can use to save and resume your analysis, share your session with others, or download your data files for local use.
 
-![Alt text](images/insert-session-token.png)
+![Alt text](images/session-token.png)
 
 **IMPORTANT:** Sessions that remain inactive for over two weeks will be automatically removed from the server. If you wish to preserve your session for a longer period, please contact: ana.bica@gimm.pt.
 
@@ -58,12 +58,30 @@ Each dimensionality reduction plot enables users to manually select groups of ce
 
 ![Alt text](images/tsne-cell-selection.png)
 
+
+# Clustering analysis 
+
+Users can perform clustering on either the raw count matrix or PCA-reduced space, with customizable parameters like feature selection and number of principal components. A clustering tree is generated to visualize results. Marker genes for each cluster can be identified through differential expression analysis, with user-defined thresholds (e.g., log fold-change) to filter results and improve performance. Several statistical methods are available, including Wilcoxon Rank Sum, likelihood-ratio test, ROC analysis, Student’s t-test, and MAST, enabling benchmarking across approaches. 
+
+![Alt text](images/clustering.png)
+
+# Differential expression analysis
+
+Users can select any combination of available cell annotations for comparison, including the union or intersection of different conditions, allowing for more flexible and customized analyses.
+
+![Alt text](images/dea.png)
+
+
+# Functional enrichment analysis 
+
+We currently provide two methods for functional enrichment analysis (FEA), gene set scoring and Gene Set Enrichment Analysis (GSEA). Gene set scores are calculated as the sum of the normalized (log2 median-centered) expression levels of the genes in each user-selected gene set. Users can choose from gene sets included in the [MSigDB Collections] (https://www.gsea-msigdb.org/gsea/msigdb/index.jsp) or define custom gene sets for analysis. GSEA is performed using the fgsea function from the fgsea package (version 1.20.0).
+
+![Alt text](images/fea.png)
+
+
+
+
 **For more information on parameter selection, please check the publication [scStudio: A User-Friendly Web Application Empowering Non-Computational Users with Intuitive scRNA-seq Data Analysis](bioRxiv)**
-
-
-
-
-
 
 
 
