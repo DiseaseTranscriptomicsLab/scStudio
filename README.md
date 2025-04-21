@@ -100,21 +100,27 @@ For each analysis method, scStudio maintains a report documenting the parameters
 
 ![Alt text](images/report.png)
 
+
 **For more information on parameter selection, please check the publication [scStudio: A User-Friendly Web Application Empowering Non-Computational Users with Intuitive scRNA-seq Data Analysis](bioRxiv)**
 
+# Running the App with Docker
 
+Each scStudio module is packaged as a standalone Docker image and can be executed independently on a local machine by following these steps:
 
+1. Ensure you have Docker installed on your machine. If not, you can download and install Docker from [here](https://www.docker.com/get-started).
 
+2. Pull the Docker image of the module that you would like to run. [Available images can be found here:](  https://hub.docker.com/repositories/martabica). For example, to start deploying the Data tab:  
+   ```bash
+   docker pull martabica/scstudio-selectdata:1.1
+   ```
 
+3. Run the app with the following command:
+   ```bash
+   docker run -p 3838:3838 -v [local/path/to/token/storage]:/home/app/tokens martabica/scstudio-selectdata:1.1
+   ```
+4. Access the app in your browser at [http://0.0.0.0:3838](http://0.0.0.0:3838).   
 
-
-
-
-
-
-
-
-
+Please note that public datasets are not included within the Docker image. However, you can create a session using the browser-based version of scStudio with public data, then download the corresponding token folder and place it in your local tokens directory to use it with the Docker version.  
 
 
 
