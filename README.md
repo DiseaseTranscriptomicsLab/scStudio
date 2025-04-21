@@ -7,10 +7,16 @@
 
 - [Development](#development)
 - [Gene Expression Omnibus interface](#gene-expression-omnibus-interface)
-
-  
-
-
+- [Quality control](#quality-control)
+- [Normalization and batch effect correction](#normalization-and-batch-effect-correction)
+- [Feature selection and dimensionality reduction](#feature-selection-and-dimensionality-reduction)
+- [Clustering analysis](#clustering-analysis)
+- [Differential expression analysis](#differential-expression-analysis)
+- [Functional enrichment analysis](#functional-enrichment-analysis)
+- [Feature plots](#feature-plots)
+- [Settings](#settings)
+- [Report](#report)
+- [Running the App with Docker](#running-the-app-with-docker)
 
 # Development
 
