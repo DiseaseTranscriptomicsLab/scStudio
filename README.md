@@ -5,7 +5,7 @@
 
 # Development
 
-Each main analysis step is implemented as a separate Shiny app. This modular approach allows users to run multiple types of analyses simultaneously, each in its own dedicated app window. As different methods complete their computations, the results are automatically updated, ensuring that users have real-time access to their data and analyses. 
+Each main analysis step is implemented as a separate Shiny app. This modular approach allows users to run multiple types of analyses simultaneously, each in its own dedicated app window. As different methods complete their computations, the results are automatically updated, ensuring that users have real-time access to their data and analyses. **[VIDEO TUTORIAL ON GETTING STARTED](link)**
 
 [![Alt text](images/Homepage.png)](https://compbio.imm.medicina.ulisboa.pt/app/scStudio)
 
@@ -79,7 +79,11 @@ We currently provide two methods for functional enrichment analysis (FEA), gene 
 ![Alt text](images/fea.png)
 
 
+# Feature plots
 
+This tab offers multiple tools for exploring gene expression data. Users can view violin plots of selected marker genes in a grid layout, with the option to group data by specific variables. Dimensionality reduction plots can be colored by gene expression levels, making it easy to identify patterns of gene activity. A dot plot is also available to compare average gene expression across groups. These visualization options are equally available for gene set scores.
+
+![Alt text](images/feature-plots.png)
 
 **For more information on parameter selection, please check the publication [scStudio: A User-Friendly Web Application Empowering Non-Computational Users with Intuitive scRNA-seq Data Analysis](bioRxiv)**
 
