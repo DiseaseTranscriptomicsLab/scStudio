@@ -85,6 +85,21 @@ This tab offers multiple tools for exploring gene expression data. Users can vie
 
 ![Alt text](images/feature-plots.png)
 
+# Settings
+
+In this tab, users can perform 3 main tasks: 
+- Assign custom colours to cell groups to simplify plot visualization and maintain consistent color references for future analyses and publications;
+- Customize cell annotations by editing existing variable names, creating new metadata fields, or incorporating clustering labels into the dataset’s metadata;
+- Subset the cells in the dataset to create a new session and continue the analysis on the selected population.
+
+![Alt text](images/colours.png)
+
+# Report 
+
+For each analysis method, scStudio maintains a report documenting the parameters used. This feature ensures that all steps of the analysis are recorded, allowing users to review and track the settings and choices made during the process.
+
+![Alt text](images/report.png)
+
 **For more information on parameter selection, please check the publication [scStudio: A User-Friendly Web Application Empowering Non-Computational Users with Intuitive scRNA-seq Data Analysis](bioRxiv)**
 
 
