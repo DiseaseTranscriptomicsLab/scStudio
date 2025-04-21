@@ -52,7 +52,16 @@ We recommend first inspecting the proportion of variance in your count matrix th
 
 # Feature selection and dimensionality reduction
 
-In this tab, users are able to first identify highly variable genes (HVGs) using a modeled mean-variance trend. The top HVGs can then be employed in downstream analyses, including dimensionality reduction and clustering, to mitigate noise from lowly expressed genes and/or genes with minimal biological variance.
+In this tab, users are able to first identify highly variable genes (HVGs) using a modeled mean-variance trend. The top HVGs can then be employed in downstream analyses, including dimensionality reduction (PCA, t-SNE and UMAP) and clustering, to mitigate noise from lowly expressed genes and/or genes with minimal biological variance. 
+
+Each dimensionality reduction plot enables users to manually select groups of cells and assign them to new annotation variables, which can then be used in downstream analyses such as differential gene expression analysis. 
+
+![Alt text](images/tsne-cell-selection.png)
+
+**For more information on parameter selection, please check the publication [scStudio: A User-Friendly Web Application Empowering Non-Computational Users with Intuitive scRNA-seq Data Analysis](bioRxiv)**
+
+
+
 
 
 
