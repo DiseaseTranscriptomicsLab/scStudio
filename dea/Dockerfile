@@ -50,7 +50,7 @@ RUN R -e 'BiocManager::install("MAST")'
 
 RUN R -e 'install.packages("devtools")'
 RUN R -e 'remotes::install_github("ChristophH/gplots")'
-RUN R -e 'remotes::install_github("XiaoLuo-boy/ggheatmap")' 
+RUN R -e 'devtools::install_github("XiaoLuo-boy/ggheatmap")' 
         
 # Set the working directory
 WORKDIR /home/app
