@@ -760,7 +760,10 @@ observeEvent(input$run_dea, {
                                                       group2, 
                                                       input$select_method_dea,
                                                       token = overall_vars$session_token
-                                                      ), supervise = FALSE)
+                                                      ), supervise = FALSE,
+                                                      stdout = "",  # Print to console
+                                                      stderr = ""   # Print errors to console
+                                                      )
      }) # close progress bar
      
   showNotification("Running DEA in the background.")
