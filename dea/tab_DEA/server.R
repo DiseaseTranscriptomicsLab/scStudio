@@ -54,15 +54,27 @@ get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
       print("Organizing final table...")
       for (n in 1:dim(markers)[1]){
         gene_name <- rownames(markers)[n]
+        rownames(mat) <- gsub("_","-", rownames(mat)) #make gene names compatible with Seurat  
+        
+        print("Testing HERE")
+        print("Group1")
+        print(group1[1:5])
+        print("Group2")
+        print(group2[1:5])
+        print("Gene name")
+        print(gene_name)
         
         meanGroup1 <- log2(mean((2**mat[gene_name, group1])-1) + 10^-9)
         meanGroup2 <- log2(mean((2**mat[gene_name, group2])-1) + 10^-9)
+        print("here1")
         
         medianGroup1<- log2(median((2**mat[gene_name, group1])-1) + 10^-9)
         medianGroup2 <- log2(median((2**mat[gene_name, group2])-1) + 10^-9)
+        print("here2")
         
         sigma1 <- sd(2**mat[gene_name, group1])
         sigma2 <- sd(2**mat[gene_name, group2]) 
+        print("here3")
         
         log2FC_mean <- meanGroup1 - meanGroup2
         #if (is.na(log2FC_mean)){log2FC_mean <- 0} 
@@ -420,7 +432,7 @@ else{
 }
 
 
-ggheatmap::ggheatmap(data = mat,
+p <- ggheatmap::ggheatmap(data = mat,
           color = colorRampPalette(c( "#0000ff","#fad541","#b60404"))(100),
           cluster_rows = clust_rows,
           cluster_cols = clust_cols,
@@ -429,7 +441,11 @@ ggheatmap::ggheatmap(data = mat,
           text_position_rows = "left",
           annotation_cols = col_metaData,
           annotation_color = col
-)   %>% ggheatmap_theme(1:2,theme =list(
+)   
+
+g <- ggheatmap_theme(ggheatmap = p,
+                     plotlist = c(1,2), 
+                     theme =list(
   
     theme(axis.title.x=element_blank(),
           text = element_text(size=20),
@@ -441,6 +457,7 @@ ggheatmap::ggheatmap(data = mat,
           legend.text = element_text(size= 18))
     )
   )
+g
 }
 
 min_max_scale <- function(x, new_min = 0, new_max = 1) {
