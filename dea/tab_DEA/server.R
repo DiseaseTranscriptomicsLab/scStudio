@@ -55,26 +55,15 @@ get_dea_allMethods <- function(ID, mat, group1, group2, methods, token){
       for (n in 1:dim(markers)[1]){
         gene_name <- rownames(markers)[n]
         rownames(mat) <- gsub("_","-", rownames(mat)) #make gene names compatible with Seurat  
-        
-        print("Testing HERE")
-        print("Group1")
-        print(group1[1:5])
-        print("Group2")
-        print(group2[1:5])
-        print("Gene name")
-        print(gene_name)
-        
+   
         meanGroup1 <- log2(mean((2**mat[gene_name, group1])-1) + 10^-9)
         meanGroup2 <- log2(mean((2**mat[gene_name, group2])-1) + 10^-9)
-        print("here1")
-        
+
         medianGroup1<- log2(median((2**mat[gene_name, group1])-1) + 10^-9)
         medianGroup2 <- log2(median((2**mat[gene_name, group2])-1) + 10^-9)
-        print("here2")
         
         sigma1 <- sd(2**mat[gene_name, group1])
         sigma2 <- sd(2**mat[gene_name, group2]) 
-        print("here3")
         
         log2FC_mean <- meanGroup1 - meanGroup2
         #if (is.na(log2FC_mean)){log2FC_mean <- 0} 
