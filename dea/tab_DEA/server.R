@@ -420,6 +420,8 @@ else{
   mat <- scale_matrix_columns(mat)
 }
 
+sessionInfo()    
+
 
 p <- ggheatmap::ggheatmap(data = mat,
           color = colorRampPalette(c( "#0000ff","#fad541","#b60404"))(100),
