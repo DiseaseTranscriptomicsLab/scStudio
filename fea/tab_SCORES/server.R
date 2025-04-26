@@ -117,18 +117,18 @@ plot_gset_heatmap <- function(scores, ids, cluster, scale, selected_cols, groups
                        text_position_rows = "left",
                        annotation_cols = col_metaData,
                        annotation_color = col
-  ) %>% ggheatmap_theme(1:2,theme =list(
+  ) #%>% ggheatmap_theme(1:2,theme =list(
     
-    theme(axis.title.x=element_blank(),
-          text = element_text(size=20),
-          axis.text.x=element_blank(), 
-          axis.ticks.x=element_blank()),
-    
-    theme(
-      legend.title = element_text(size = 18),
-      legend.text = element_text(size= 18))
-  )
-)
+   # theme(axis.title.x=element_blank(),
+   #       text = element_text(size=20),
+   #       axis.text.x=element_blank(), 
+   #       axis.ticks.x=element_blank()),
+   # 
+   # theme(
+   #   legend.title = element_text(size = 18),
+   #   legend.text = element_text(size= 18))
+  #)
+#)
   
 }
 
