@@ -42,6 +42,7 @@ library(tools)
 #library(limma)
 
 print("Sucessfully loaded libraries.")
+print(sessionInfo())
 
 #LOAD TABS-------------------------------
 
