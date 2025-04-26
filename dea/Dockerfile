@@ -46,6 +46,7 @@ RUN R -e 'install.packages("stringr", repos="https://packagemanager.rstudio.com/
 RUN R -e 'install.packages("BiocManager")'
 RUN R -e 'BiocManager::install("scuttle")'
 RUN R -e 'BiocManager::install("BiocSingular")'
+RUN R -e 'BiocManager::install("ggtree")'
 RUN R -e 'BiocManager::install("MAST")'
 
 RUN R -e 'install.packages("devtools")'
