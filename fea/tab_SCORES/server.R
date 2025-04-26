@@ -108,7 +108,7 @@ plot_gset_heatmap <- function(scores, ids, cluster, scale, selected_cols, groups
   if (scale == "none") {legend_name <- "log2(counts + 1)"
   } else {legend_name <- "Z-score"}
   
-  ggheatmap::ggheatmap(data = mat,
+  p <- ggheatmap::ggheatmap(data = mat,
                        color = colorRampPalette(c( "#0000ff","#fad541","#b60404"))(100),
                        cluster_rows = clust_rows,
                        cluster_cols = clust_cols,
@@ -117,19 +117,19 @@ plot_gset_heatmap <- function(scores, ids, cluster, scale, selected_cols, groups
                        text_position_rows = "left",
                        annotation_cols = col_metaData,
                        annotation_color = col
-  ) #%>% ggheatmap_theme(1:2,theme =list(
-    
-   # theme(axis.title.x=element_blank(),
-   #       text = element_text(size=20),
-   #       axis.text.x=element_blank(), 
-   #       axis.ticks.x=element_blank()),
-   # 
-   # theme(
-   #   legend.title = element_text(size = 18),
-   #   legend.text = element_text(size= 18))
-  #)
-#)
+  ) 
   
+  g <- ggheatmap_theme(ggheatmap = p,
+                     plotlist = 1, 
+                     theme =list(
+  
+    theme(axis.title.x=element_blank(),
+          text = element_text(size=20),
+          axis.text.x=element_blank(), 
+          axis.ticks.x=element_blank())
+    ) #close list
+  ) #close ggheatmap_theme 
+g
 }
 
 plot_pathway <- function(selected_pathway, nrank, species){
