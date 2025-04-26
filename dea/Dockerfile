@@ -42,6 +42,7 @@ RUN R -e 'install.packages("shinyjs", repos="https://packagemanager.rstudio.com/
 RUN R -e 'install.packages("shinythemes", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("stringi", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
 RUN R -e 'install.packages("stringr", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2023-04-20")'
+RUN R -e 'install.packages("tidytree", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2024-04-20")'
 
 RUN R -e 'install.packages("devtools")'
 RUN R -e 'remotes::install_github("YuLab-SMU/ggtree")'
