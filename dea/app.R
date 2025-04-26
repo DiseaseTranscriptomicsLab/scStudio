@@ -11,6 +11,7 @@ library(DT)
 library(dplyr)
 library(ff)
 library(ggheatmap) #install dev github version
+library(ggfun)
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
