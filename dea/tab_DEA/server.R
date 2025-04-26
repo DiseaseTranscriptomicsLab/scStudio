@@ -446,7 +446,7 @@ g <- ggheatmap_theme(ggheatmap = p,
           legend.text = element_text(size= 18))
     )
   )
-g
+p
 }
 
 min_max_scale <- function(x, new_min = 0, new_max = 1) {
