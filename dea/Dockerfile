@@ -27,6 +27,7 @@ COPY . /home/app
 # Set GitHub PAT (token with no scopes)
 ENV GITHUB_PAT=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
 
+
 # Restore the environment exactly
 RUN R -e "renv::restore()"
 
