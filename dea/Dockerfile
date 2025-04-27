@@ -27,7 +27,7 @@ COPY . /home/app
 # Set GitHub PAT (token with no scopes)
 ENV GITHUB_PAT=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
 
-RUN curl -I https://api.github.com
+RUN curl -I https://api.github.com/repos/XiaoLuo-boy/ggheatmap/tarball/5c373eb99f758c0a4d34ed1b008e59a7245226e4
 
 ENV RENV_DOWNLOAD_METHOD=libcurl
 
