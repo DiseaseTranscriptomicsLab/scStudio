@@ -15,6 +15,8 @@ RUN apt-get install -y libgeos-dev
 
 RUN apt-get install -y libglpk40 libglpk-dev
 
+RUN apt-get install -y libpng-dev
+
 # Install renv
 RUN R -e "install.packages('renv', repos='https://cloud.r-project.org')"
       
