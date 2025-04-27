@@ -17,8 +17,6 @@ RUN apt-get install -y libglpk40 libglpk-dev
 
 # Install renv
 RUN R -e "install.packages('renv', repos='https://cloud.r-project.org')"
-
-RUN R -e "install.packages('gitcreds', repos = 'https://cloud.r-project.org')"
       
 # Set the working directory
 WORKDIR /home/app
@@ -30,6 +28,8 @@ ENV RENV_DOWNLOAD_METHOD=libcurl
 
 # Restore the environment exactly
 RUN R -e "renv::restore()"
+
+RUN R -e 'devtools::install_github("XiaoLuo-boy/ggheatmap")' 
 
 # Expose the port
 EXPOSE 3838
