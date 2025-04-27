@@ -4030,43 +4030,6 @@
       "Maintainer": "Guangchuang Yu <guangchuangyu@gmail.com>",
       "Repository": "CRAN"
     },
-    "ggheatmap": {
-      "Package": "ggheatmap",
-      "Version": "2.11",
-      "Source": "GitHub",
-      "Title": "Plot Heatmap",
-      "Authors@R": "person(given = \"Baiwei\", family = \"Luo\", role = c(\"aut\", \"cre\"), email = \"2734782653@qq.com\")",
-      "Maintainer": "Baiwei Luo <2734782653@qq.com>",
-      "Description": "The flexibility and excellence of 'ggplot2' is unquestionable,  so many drawing tools basically need 'ggplot2' as the operating object.  In order to develop a heatmap drawing system based on ggplot2, we developed  this tool, mainly to solve the heatmap puzzle problem and the flexible  connection between the heatmap and the 'ggplot2' object. The advantages of this tool are as follows:  1. More flexible label settings;  2. Realize the linkage of heatmap and 'ggplot2' drawing system,  which is helpful for operations such as puzzles;  3. Simple and easy to operate;  4. Optimization of clustering tree visualization.",
-      "License": "GPL-3",
-      "Encoding": "UTF-8",
-      "Roxygen": "list(markdown = TRUE)",
-      "RoxygenNote": "7.1.1",
-      "Depends": [
-        "ggplot2"
-      ],
-      "Imports": [
-        "aplot",
-        "ggtree",
-        "tibble",
-        "ggpubr",
-        "tidyr",
-        "patchwork"
-      ],
-      "Suggests": [
-        "grDevices",
-        "stats",
-        "testthat"
-      ],
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteRepo": "ggheatmap",
-      "RemoteUsername": "XiaoLuo-boy",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "5c373eb99f758c0a4d34ed1b008e59a7245226e4",
-      "NeedsCompilation": "no",
-      "Author": "Baiwei Luo [aut, cre]"
-    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.5.1",
