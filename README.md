@@ -1,4 +1,4 @@
-# scStudio
+# [scStudio - Web Browser Version](https://compbio.imm.medicina.ulisboa.pt/app/scStudio)
 **A User-Friendly Web Application Empowering Non-Computational Users with Intuitive scRNA-seq Data Analysis**
 
 **scStudio** is a user-friendly, web-based application for comprehensive and modular scRNA-seq data analysis. It supports automatic data retrieval from GEO, custom data uploads, and integration of multiple datasets. With tools for quality control, normalization, clustering, differential expression, and enrichment analysis, it offers flexibility, session tracking, and sharing features—making advanced single-cell analysis accessible to a broad range of users.
