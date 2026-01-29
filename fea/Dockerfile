@@ -18,14 +18,8 @@ RUN apt-get update && apt-get install -y \
 # Force R to build from source (avoids binary mismatch issues)
 RUN R -e "options(pkgType='source')"
 
-# CRAN packages
-RUN R -e "install.packages(c(
-  'cowplot','data.table','dplyr','DT','ff','ggfun','ggplot2','ggplotify',
-  'ggpubr','ggrepel','ggridges','gridExtra','magrittr','Matrix',
-  'matrixStats','msigdbr','patchwork','plotly','reshape2','Seurat',
-  'shiny','shinycssloaders','shinydashboard','shinyjs','shinythemes',
-  'stringr','tidytree','gplots'
-))"
+# CRAN packages (one command, proper quoting)
+RUN R -e "install.packages(c('cowplot','data.table','dplyr','DT','ff','ggfun','ggplot2','ggplotify','ggpubr','ggrepel','ggridges','gridExtra','magrittr','Matrix','matrixStats','msigdbr','patchwork','plotly','reshape2','Seurat','shiny','shinycssloaders','shinydashboard','shinyjs','shinythemes','stringr','tidytree','gplots'))"
 
 # Bioconductor packages
 RUN R -e "install.packages('BiocManager')"
