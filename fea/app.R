@@ -8,9 +8,11 @@ library(dplyr)
 library(ff)
 library(fgsea)
 library(ggheatmap) #install dev github version
+#devtools::install_github("XiaoLuo-boy/ggheatmap")
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
+library(ggtree) #add
 library(gplots)
 library(gridExtra)
 library(Matrix)
@@ -466,14 +468,17 @@ observe({
     output$gene_set <- NULL
     
     get_categories <-  readRDS(paste0(getwd(), "/","/msigdbr_collections.rds"))
+ 
 
     if (input$select_database %in% c("H", "C1", "C6", "C8")){  
       options <- msigdbr(species = input$gset_scores_organism, category = input$select_database)
       options <- unique(options$gs_name)
     }
     else{
-      cat <- get_categories[get_categories$gs_subcat == input$select_database, "gs_cat"]
-      options <- msigdbr(species = input$gset_scores_organism, category = cat, subcategory = input$select_database)
+      cat <- get_categories[get_categories$gs_subcollection == input$select_database, "gs_collection"]
+    
+      options <- msigdbr(species = input$gset_scores_organism, category = cat$gs_collection, subcategory = input$select_database)
+      
       options <- unique(options$gs_name)
     }
     
@@ -505,6 +510,9 @@ observe({
                     selected = "orig.ident")
   
   updateSelectInput(session, "select_gset_scores",
+                    choices = names(overall_vars$scores))
+  
+  updateSelectInput(session, "select_gsets",
                     choices = names(overall_vars$scores))
   
   updateSelectizeInput(session, 
@@ -592,6 +600,9 @@ observeEvent(input$calculate_gset_score,{
                       choices = names(overall_vars$scores),
                       selected = NULL)
     
+    updateSelectInput(session, "select_gsets",
+                      choices = names(overall_vars$scores))
+    
     updateSelectizeInput(session, 
                          "gene_set", 
                          choices =  overall_vars$genes, 
@@ -617,9 +628,49 @@ observeEvent(input$plot_gset_scores ,{
                         selected_cols = overall_vars$colours[[input$gset_var]], 
                         groups = overall_vars$metadata[[input$gset_var]])
       p
-    }, height = 800, width = 1500), input$plot_gset_scores)
+    }, height = 400, width = 1000), input$plot_gset_scores)
     }
   })
+
+observeEvent(input$plot_gset_similarity ,{
+
+  if (length(input$select_gsets) > 1 ){
+    
+    
+    output$gsets_similarity_heatmap <- bindEvent(renderPlot({
+      
+      signature_list <- list()
+      print(input$select_gsets)
+      for (gset in input$select_gsets){
+        print(gset)
+        signature_list[[gset]] <- overall_vars$report$scores[[gset]]$genes
+      }
+      
+      if (input$similarity_option == "Jaccard index"){
+      p <- markeR::geneset_similarity(
+        signatures = signature_list,
+        other_user_signatures = signature_list,
+        jaccard_threshold = 0.05,
+        msig_subset = NULL, 
+        metric = "jaccard"
+      )$plot
+      
+      }
+      else{
+        p <- markeR::geneset_similarity(
+          signatures = signature_list,
+          other_user_signatures = signature_list,
+          msig_subset = NULL, 
+          metric = "odds_ratio",
+          universe = overall_vars$genes#,
+          #or_threshold = 100,
+          #pval_threshold = 0.05 
+        )$plot
+      }
+      p
+    }, height = 400, width = 750), input$plot_gset_similarity)
+  }
+})
    
 # RUN GSEA --------------------------------------------------------------------   
 observeEvent(input$run_gsea, {
