@@ -15,7 +15,7 @@ RUN apt-get install -y libgeos-dev
 
 RUN apt-get install -y libglpk40 libglpk-dev
 
-RUN apt-get install -y libssl1.1
+RUN R -e "install.packages('curl', type='source')"
 
 # Install R packages
 RUN R -e 'install.packages("cowplot", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2026-01-29")'
