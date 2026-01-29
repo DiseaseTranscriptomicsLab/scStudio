@@ -45,7 +45,6 @@ RUN R -e 'install.packages("shinycssloaders", repos="https://packagemanager.rstu
 RUN R -e 'install.packages("shinydashboard", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2026-01-24")'
 RUN R -e 'install.packages("shinyjs", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2026-01-24")'
 RUN R -e 'install.packages("shinythemes", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2026-01-24")'
-RUN R -e 'install.packages("stringi", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2026-01-24")'
 RUN R -e 'install.packages("stringr", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2026-01-24")'
 RUN R -e 'install.packages("tidytree", repos="https://packagemanager.rstudio.com/cran/__linux__/focal/2026-01-24")'
 
