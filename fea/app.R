@@ -12,9 +12,10 @@ library(ggheatmap) #install dev github version
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
-library(ggtree) #add
+library(ggtree)
 library(gplots)
 library(gridExtra)
+library(markeR)
 library(Matrix)
 library(matrixStats)
 library(magrittr)
