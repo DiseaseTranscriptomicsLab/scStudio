@@ -15,6 +15,8 @@ RUN apt-get install -y libgeos-dev
 
 RUN apt-get install -y libglpk40 libglpk-dev
 
+ RUN apt-get install -y libicu-dev
+
 RUN R -e "install.packages('curl', type='source')"
 
 # Install R packages
