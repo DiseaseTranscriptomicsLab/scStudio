@@ -2,25 +2,18 @@ FROM rocker/tidyverse:4.5.2
 
 LABEL maintainer="Marta Bica <mbica.compbio@gmail.com>"
 
-# ---- Extra system dependencies not included in tidyverse ----
+# ---- Extra system dependencies ----
 RUN apt-get update && apt-get install -y \
     libglpk-dev \
     libgeos-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# ---- Force R to build packages from source ----
+# ---- Force source installs ----
 RUN R -e "options(pkgType='source')"
 
 # ---- Install CRAN packages ----
-RUN R -e "install.packages(c(
-    'cowplot','data.table','DT','ff','ggfun','ggplotify',
-    'ggpubr','ggrepel','ggridges','gridExtra','magrittr',
-    'Matrix','matrixStats','msigdbr','patchwork','plotly',
-    'reshape2','Seurat','shiny','shinycssloaders',
-    'shinydashboard','shinyjs','shinythemes',
-    'stringr','tidytree','gplots','BiocManager','devtools'
-))"
+RUN R -e "install.packages(c('cowplot','data.table','DT','ff','ggfun','ggplotify','ggpubr','ggrepel','ggridges','gridExtra','magrittr','Matrix','matrixStats','msigdbr','patchwork','plotly','reshape2','Seurat','shiny','shinycssloaders','shinydashboard','shinyjs','shinythemes','stringr','tidytree','gplots','BiocManager','devtools'))"
 
 # ---- Install Bioconductor packages ----
 RUN R -e "BiocManager::install(c('scuttle','BiocSingular','fgsea','markeR'), ask=FALSE, update=FALSE)"
