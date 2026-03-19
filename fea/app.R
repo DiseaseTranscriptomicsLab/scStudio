@@ -1,6 +1,5 @@
 #INFORMATION-----------------------------
 
-
 #LOAD LIBRARIES ------------------------
 library(data.table)
 library(DT)
@@ -51,7 +50,7 @@ source("tab_PSEUDO/server.R")
 
 print("Successfully loaded tabs.")
 
-#USER INFERFACE ----------------------------
+#USER INTERFACE ----------------------------
 
 ui <- fluidPage(
 ## theme ----------------------------------------
