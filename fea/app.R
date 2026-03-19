@@ -12,7 +12,7 @@ library(ggheatmap) #install dev github version
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
-library(ggtree)
+library(ggtree) #add
 library(gplots)
 library(gridExtra)
 library(markeR)
@@ -47,6 +47,9 @@ source("tab_SCORES/server.R")
 source("tab_GSEA/UI.R")
 source("tab_GSEA/server.R")
 
+source("tab_PSEUDO/UI.R")
+source("tab_PSEUDO/server.R")
+
 print("Successfully loaded tabs.")
 
 #USER INFERFACE ----------------------------
@@ -80,8 +83,12 @@ tags$head(
   navbarPage("scStudio: FEA",
           tabPanel("Scores",
                      tab_SCORES),
+          #tabPanel("ORA",
+          #         tab_ORA),
           tabPanel("GSEA",
-                   tab_GSEA)
+                   tab_GSEA),
+          tabPanel("Pseudobulk",
+                   tab_PSEUDO)
       )#close navbarPage 
   
 ) #close UI 
@@ -195,9 +202,17 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
              else {overall_vars$dea <- list()
              save_session(overall_vars$session_token ,overall_vars, "dea")}
              
-             
              overall_vars$md5$dea <- md5sum(
                paste0(getwd(),"/tokens/", overall_vars$session_token, "/dea.rds"))
+             
+             if ("pseudobulk.rds" %in% files){
+               overall_vars$pseudobulk <- upload_session(overall_vars$session_token, "pseudobulk")
+             } #close if 
+             else {overall_vars$pseudobulk <- list()
+             save_session(overall_vars$session_token ,overall_vars, "pseudobulk")}
+             
+             overall_vars$md5$pseudobulk <- md5sum(
+               paste0(getwd(),"/tokens/", overall_vars$session_token, "/pseudobulk.rds"))
              
              if ("scores.rds" %in% files){
                overall_vars$scores <- upload_session(overall_vars$session_token, "scores")
@@ -210,6 +225,12 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
              } #close if 
              else {overall_vars$gsea <- list()
              save_session(overall_vars$session_token ,overall_vars, "gsea")}
+             
+             updateSelectInput(session, "select_group_pseudo",
+                               choices = names(identify_discrete(overall_vars$metadata)), 
+                               selected = "orig.ident")
+             updateSelectInput(session, "select_condition_pseudo",
+                               choices = names(identify_discrete(overall_vars$metadata)))
   
         } #close if 
        
@@ -282,6 +303,14 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
            overall_vars$md5$dea <- md5sum(
              paste0(getwd(),"/tokens/", overall_vars$session_token, "/dea.rds"))
            
+           if ("pseudobulk.rds" %in% files){
+             overall_vars$pseudobulk <- upload_session(overall_vars$session_token, "pseudobulk")
+           } #close if 
+           else {overall_vars$pseudobulk <- list()
+           save_session(overall_vars$session_token ,overall_vars, "pseudobulk")}
+           
+           overall_vars$md5$pseudobulk <- md5sum(
+             paste0(getwd(),"/tokens/", overall_vars$session_token, "/pseudobulk.rds"))
            
            if ("scores.rds" %in% files){
              overall_vars$scores <- upload_session(overall_vars$session_token, "scores")
@@ -294,6 +323,12 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
            } #close if 
            else {overall_vars$gsea <- list()
            save_session(overall_vars$session_token ,overall_vars, "gsea")}
+           
+           updateSelectInput(session, "select_group_pseudo",
+                             choices = names(identify_discrete(overall_vars$metadata)), 
+                             selected = "orig.ident")
+           updateSelectInput(session, "select_condition_pseudo",
+                             choices = names(identify_discrete(overall_vars$metadata)))
         
           incProgress(1, detail = "Done.")
          }) #close progress
@@ -503,12 +538,55 @@ observe({
   
   output$gset_pathway <- NULL}
   
+  if (input$select_database_pseudo != "Custom"){
+    
+    output$gene_set_pseudo <- NULL
+    
+    get_categories <-  readRDS(paste0(getwd(), "/","/msigdbr_collections.rds"))
+    
+    
+    if (input$select_database_pseudo %in% c("H", "C1", "C6", "C8")){  
+      options <- msigdbr(species = input$gset_scores_organism_pseudo, category = input$select_database_pseudo)
+      options <- unique(options$gs_name)
+    }
+    else{
+      cat <- get_categories[get_categories$gs_subcollection == input$select_database_pseudo, "gs_collection"]
+      
+      options <- msigdbr(species = input$gset_scores_organism_pseudo, category = cat$gs_collection, 
+                         subcategory = input$select_database_pseudo)
+      
+      options <- unique(options$gs_name)
+    }
+    
+    output$gset_pathway_pseudo <- renderUI(selectInput(inputId = "gset_pathway_pseudo", label = "Gene Sets:", 
+                                                choices = options, multiple = TRUE))
+    
+  } #close if 
+  
+  else {output$gene_set_pseudo <- renderUI(
+    selectizeInput(inputId = "gene_set_pseudo", 
+                   label = "Custom Gene Set:",
+                   choices = NULL, 
+                   selected = NULL, 
+                   multiple = TRUE, 
+                   options = NULL))
+  
+  updateSelectizeInput(session, 
+                       "gene_set_pseudo", 
+                       choices =  overall_vars$genes, 
+                       server = TRUE)
+  
+  output$gset_pathway_pseudo <- NULL}
+  
   updateSelectInput(session, "select_matrix_scores",
+                    choices = overall_vars$mat_names[-1])
+  updateSelectInput(session, "select_matrix_pseudo",
                     choices = overall_vars$mat_names[-1])
   
   updateSelectInput(session, "gset_var",
                     choices = names(identify_discrete(overall_vars$metadata)), 
                     selected = "orig.ident")
+  
   
   updateSelectInput(session, "select_gset_scores",
                     choices = names(overall_vars$scores))
@@ -766,6 +844,56 @@ output$table_gsea <- DT::renderDataTable({
          class = "display")}, 
        selection = 'single', server = FALSE)
    }) #close observeEvent
+   
+   
+# RUN PSEUDO --------------------------------------------------------------------   
+   observeEvent(input$calculate_pseudobulk, {
+     
+     print("Running Pseudobulk")
+     
+     withProgress(message = 'Running Pseudobulk...', value = 0, {
+       overall_vars$countMatrices <- upload_session(overall_vars$session_token, "countMatrices")
+       incProgress(0.4, detail = "")
+       
+       try({
+         pseudobulk <- make_pseudobulk(
+           count_matrix = overall_vars$countMatrices[input$select_matrix_pseudo], 
+           metadata = overall_vars$metadata, 
+           group = overall_vars$metadata[,input$select_group_pseudo]
+         )
+         
+         
+         
+         #save_session(overall_vars$session_token, overall_vars, "pseudobulk")
+         
+         
+         
+         output$marker <- renderPlot({
+           
+           run_marker(organism = input$gset_scores_organism_pseudo, 
+                      database = input$select_database_pseudo, 
+                      pathways = input$gset_pathway_pseudo, 
+                      count_matrix = pseudobulk[[1]],
+                      metadata = pseudobulk[[2]], 
+                      condition = input$select_condition_pseudo,
+                      method = input$method_pseudobulk)
+         }, height = 700, width = 1000)
+         
+         output$marker_roc <- renderPlot({
+           
+           run_marker_roc(organism = input$gset_scores_organism_pseudo, 
+                      database = input$select_database_pseudo, 
+                      pathways = input$gset_pathway_pseudo, 
+                      count_matrix = pseudobulk[[1]],
+                      metadata = pseudobulk[[2]], 
+                      condition = input$select_condition_pseudo,
+                      method = input$method_pseudobulk)
+         }, height = 300, width = 1000)
+         
+       })
+     }) # close progress bar
+     
+   })
    
 
 }#close server
