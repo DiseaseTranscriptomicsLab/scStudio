@@ -5,7 +5,8 @@
 
 get_score <- function(mat, gene_set, name){
   gene_set <- unlist(strsplit(gene_set, ' '))
- 
+
+  mat <- as.matrix(mat)
   mat <- t(mat[gene_set,])
     
     
