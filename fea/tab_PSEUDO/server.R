@@ -19,12 +19,14 @@ aggregate_column <- function(x) {
 
 make_pseudobulk <- function(count_matrix, metadata, group){
    
-  count_matrix <- as.matrix(count_matrix[[1]])
-  
-  print(typeof(count_matrix))
+  count_matrix <- count_matrix[[1]]
+
+  count_matrix <- as.matrix(count_matrix)
   
   counts <- 2^count_matrix - 1
   counts[counts < 0] <- 0
+  
+  group <- paste("pseudo", group, sep = "_")
   
   pseudobulk_counts <- sapply(unique(group), function(g) {
     rowSums(counts[, group == g, drop = FALSE])
