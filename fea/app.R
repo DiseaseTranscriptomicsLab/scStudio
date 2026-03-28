@@ -886,7 +886,7 @@ output$table_gsea <- DT::renderDataTable({
                       metadata = pseudobulk[[2]], 
                       condition = input$select_condition_pseudo,
                       method = input$method_pseudobulk)
-         }, height = 300, width = 1000)
+         }, height = 300, width = 2000)
          
        })
      }) # close progress bar
