@@ -11,7 +11,6 @@ library(DT)
 library(dplyr)
 library(ff)
 library(ggheatmap) #install dev github version
-library(ggfun)
 library(ggplot2)
 library(ggpubr)
 library(ggrepel)
@@ -42,7 +41,6 @@ library(tools)
 #library(limma)
 
 print("Sucessfully loaded libraries.")
-print(sessionInfo())
 
 #LOAD TABS-------------------------------
 
@@ -544,9 +542,9 @@ output$session_id <- renderText({ paste0("Session token: ", overall_vars$session
      try({
        if (length(grep("roc",input$select_dea)) == 1){
          
-         opts <- c("AUC", "Average Log2FC","Power", "SNR")
+         opts <- c("AUC", "Average Log2FC","Power", "SNR", "Cohens-d")
        }
-       else { opts <- c("Average Log2FC","-log10(Adjusted p-value)", "SNR")}
+       else { opts <- c("Average Log2FC","-log10(Adjusted p-value)", "SNR", "Cohens-d", "Score")}
        
        updateSelectInput(session, "volcano_X",choices = opts, selected = "Average Log2FC")
        updateSelectInput(session, "volcano_Y",choices = opts, selected = "SNR")
