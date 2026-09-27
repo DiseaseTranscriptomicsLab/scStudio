@@ -7,6 +7,7 @@
 
 - [Development](#development)
 - [Gene Expression Omnibus interface](#gene-expression-omnibus-interface)
+- [Manual upload fallback for GEO datasets](#manual-upload-fallback-for-geo-datasets)
 - [Quality control](#quality-control)
 - [Normalization and batch effect correction](#normalization-and-batch-effect-correction)
 - [Feature selection and dimensionality reduction](#feature-selection-and-dimensionality-reduction)
@@ -46,6 +47,41 @@ scStudio enables the automatic retrieval of scRNA-seq data from GEO. To get star
 **Note:** Currently supported data formats include tabular files (CSV, TSV, TXT), Excel spreadsheets (XLSX), Cell Ranger Market Exchange Format (MEX) files commonly used for 10X Genomics data, and HDF5 (.h5) files.
 
 ![Alt text](images/GEO-upload.png)
+
+# Manual upload fallback for GEO datasets
+
+Automatic GEO retrieval assumes the dataset follows minimal format compliance rules. Because GEO does not enforce a standard format for supplementary files, some entries cannot be loaded automatically. Common reasons include:
+
+- Count data shared in non-standard layouts, such as Excel files with lengthy text headers
+- Multiple data modalities (e.g., spatial transcriptomics, CITE-seq, ChIP-seq) stored alongside scRNA-seq data in the same entry
+- Experiments performed with different protocols combined in a single entry
+- Files without clear sample labelling or identification
+- File types not covered by the automatic workflows
+
+If a dataset fails to load, or loads with missing or mislabelled samples, you can still analyze it by downloading the files yourself and uploading them through the [Data interface](https://compbio.imm.medicina.ulisboa.pt/app/scStudio_DATA).
+
+**Step 1: Download the files from GEO.** Open the dataset's GEO accession page (e.g., `https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE137710`) and scroll to the *Supplementary file* section. Download the count matrix files for the samples you need, plus any metadata files provided by the authors. If files come as a `.tar` archive, extract them locally first.
+
+**Step 2: Check the format.** Manual upload supports:
+
+- Tabular count matrices: `.txt`, `.csv`, `.tsv`
+- 10X Genomics Cell Ranger `.h5` files
+- Market Exchange Format (MEX) files: `barcodes.tsv.gz`, `features.tsv.gz` and `matrix.mtx.gz`
+- Seurat and SingleCellExperiment `.rds` objects, with cell-level metadata retrieved automatically when available
+
+Tabular count matrices must have **genes in rows and cells in columns**, with gene names in the first column and cell barcodes in the header row. Some GEO entries store matrices the other way round (cells in rows); these need to be transposed before uploading.
+
+If the counts are in an Excel file with extra header rows, remove the header text and save the matrix as `.csv` before uploading.
+
+**Step 3: Upload the data.** In the Data interface, choose the upload option and select your files. Each sample or dataset can be uploaded separately; scStudio integrates multiple datasets even when they are in different file formats.
+
+**Step 4: Add metadata.** Sample-level annotations collected automatically from GEO are not available with manual upload, so upload a metadata table with the cell-level variables you need (e.g., sample, condition, batch, cell type). You can also create or edit annotations later in the **Settings** tab.
+
+**Tip:** Author-provided `.rds` objects often already contain cell-level metadata such as cluster labels and cell type annotations, which are rarely available in standard GEO count files. When an entry offers one, it is usually the quickest route.
+
+If a dataset still cannot be loaded, please contact mbica.compbio@gmail.com with the GEO accession ID.
+
+![Alt text](images/manual-upload.png)
    
 # Quality control
 
