@@ -80,8 +80,6 @@ If the counts are in an Excel file with extra header rows, remove the header tex
 **Tip:** Author-provided `.rds` objects often already contain cell-level metadata such as cluster labels and cell type annotations, which are rarely available in standard GEO count files. When an entry offers one, it is usually the quickest route.
 
 If a dataset still cannot be loaded, please contact mbica.compbio@gmail.com with the GEO accession ID.
-
-![Alt text](images/manual-upload.png)
    
 # Quality control
 
