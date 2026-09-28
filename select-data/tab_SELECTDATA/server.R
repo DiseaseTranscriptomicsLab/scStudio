@@ -1,4 +1,3 @@
-
 # SELECT DATA TAB -----------------------------------------------------------------------------------------        
 
 # UPLOAD PP -----------------------------------------------
@@ -711,10 +710,53 @@ load_sce <- function(sce_path, name){
 }
 
 
+# Reads counts from a Seurat v5 "Assay5" without needing SeuratObject v5.
+# Assay5 stores matrices in @layers (without dimnames) and gene/cell names in
+# the @features / @cells LogMaps, so we read those slots as plain attributes.
+read_assay5_counts <- function(assay) {
+  layers   <- attr(assay, "layers")
+  features <- attr(assay, "features")
+  cells    <- attr(assay, "cells")
+  f_names  <- attr(features, "dimnames")
+  c_names  <- attr(cells, "dimnames")
+  f_mat <- matrix(as.logical(unclass(features)), nrow = length(f_names[[1]]), dimnames = f_names)
+  c_mat <- matrix(as.logical(unclass(cells)),    nrow = length(c_names[[1]]), dimnames = c_names)
+
+  # "counts", or "counts.1", "counts.2", ... when layers are split
+  count_layers <- grep("^counts", names(layers), value = TRUE)
+  if (length(count_layers) == 0) stop("No 'counts' layer found in the Seurat v5 assay.")
+
+  all_features <- rownames(f_mat)
+  mats <- lapply(count_layers, function(l) {
+    m <- layers[[l]]
+    rownames(m) <- rownames(f_mat)[f_mat[, l]]
+    colnames(m) <- rownames(c_mat)[c_mat[, l]]
+    if (!identical(rownames(m), all_features)) {   # pad split layers to the full gene set
+      full <- Matrix::Matrix(0, nrow = length(all_features), ncol = ncol(m), sparse = TRUE,
+                             dimnames = list(all_features, colnames(m)))
+      full[rownames(m), ] <- m
+      m <- full
+    }
+    as(m, "CsparseMatrix")
+  })
+  do.call(cbind, mats)
+}
+
 load_srt <- function(srt_path, name){
+  if (is.null(srt_path) || is.null(srt_path$datapath)) {
+    stop("No Seurat .rds file uploaded yet. Choose a file and wait for the upload to finish.")
+  }
   srt <- readRDS(srt_path$datapath)
-  counts <- GetAssayData(srt, slot = "counts")
-  metadata <- srt@meta.data
+  assay_name <- attr(srt, "active.assay")
+  assay <- attr(srt, "assays")[[assay_name]]
+
+  if (!is.null(attr(assay, "layers"))) {    # Seurat v5 object (Assay5 has @layers)
+    counts <- read_assay5_counts(assay)
+  } else {                                  # Seurat v3/v4 object
+    counts <- GetAssayData(srt, assay = assay_name, slot = "counts")
+  }
+  metadata <- attr(srt, "meta.data")
+  counts <- counts[, rownames(metadata)]    # keep cells in metadata order
   metadata$orig.ident <- name
   metadata$barcodes <- colnames(counts)
   
@@ -786,11 +828,3 @@ define_cell_ids <- function(number_cells){
   }
   return(cell_ids)
 }
-
-
-
-
-
-
-
-
