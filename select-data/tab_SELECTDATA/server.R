@@ -713,6 +713,7 @@ load_sce <- function(sce_path, name){
 # Reads counts from a Seurat v5 "Assay5" without needing SeuratObject v5.
 # Assay5 stores matrices in @layers (without dimnames) and gene/cell names in
 # the @features / @cells LogMaps, so we read those slots as plain attributes.
+print("Seurat V5 compatibility")
 read_assay5_counts <- function(assay) {
   layers   <- attr(assay, "layers")
   features <- attr(assay, "features")
